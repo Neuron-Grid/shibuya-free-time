@@ -1,96 +1,220 @@
-import type { Article } from "@/types/newt/article";
 import type { Category } from "@/types/newt/category";
+import type { Spot } from "@/types/newt/spot";
+import type { Tag, TagWithCount } from "@/types/newt/tag";
 import { env_validation } from "@/utils/env_validation";
 import { createClient } from "newt-client-js";
 import type { AppMeta, GetContentsQuery } from "newt-client-js";
 import { cache } from "react";
 
-// 環境変数を定数として定義
-const {
-    newt_space_Uid: SPACE_UID,
-    newt_token: TOKEN,
-    newt_api_Type: API_TYPE,
-    newt_app_Uid: APP_UID,
-    newt_article_Model_Uid: ARTICLE_MODEL_UID,
-    newt_category_Model_Uid: CATEGORY_MODEL_UID,
-} = env_validation;
-
-// Newtクライアントの作成
+// Newtのクライアントを作成
 const client = createClient({
-    spaceUid: SPACE_UID,
-    token: TOKEN,
-    apiType: API_TYPE,
+    spaceUid: env_validation.newt_space_Uid,
+    token: env_validation.newt_token,
+    apiType: env_validation.newt_api_Type,
 });
 
-// アプリ情報を取得
+// アプリケーションのメタデータを取得
 export const getApp = cache(async (): Promise<AppMeta> => {
-    return client.getApp({ appUid: APP_UID });
+    const app = await client.getApp({
+        appUid: env_validation.newt_app_Uid,
+    });
+    return app;
 });
 
-// 記事一覧を取得
-export const getArticles = cache(
-    async (query?: GetContentsQuery): Promise<{ articles: Article[]; total: number }> => {
-        const { items: articles, total } = await client.getContents<Article>({
-            appUid: APP_UID,
-            modelUid: ARTICLE_MODEL_UID,
-            query,
+// スポット一覧を取得
+export const getSpots = cache(
+    async (query?: GetContentsQuery): Promise<{ spots: Spot[]; total: number }> => {
+        const { items: spots, total } = await client.getContents<Spot>({
+            appUid: env_validation.newt_app_Uid,
+            modelUid: "spot",
+            query: {
+                depth: 2,
+                ...query,
+            },
         });
-        return { articles, total };
+        return { spots, total };
     },
 );
 
-// 特定の記事を取得
-export const getArticle = cache(async (slug: string): Promise<Article | null> => {
+// 特定のスラッグのスポットを取得
+export const getSpot = cache(async (slug: string): Promise<Spot | null> => {
     if (!slug) return null;
-    return client.getFirstContent<Article>({
-        appUid: APP_UID,
-        modelUid: ARTICLE_MODEL_UID,
-        query: { slug },
+    const spot = await client.getFirstContent<Spot>({
+        appUid: env_validation.newt_app_Uid,
+        modelUid: "spot",
+        query: {
+            depth: 2,
+            slug,
+        },
     });
+    return spot || null;
 });
 
-// カテゴリ一覧を取得（記事が存在するカテゴリのみ）
-export const getCategories = cache(async (): Promise<Category[]> => {
-    // カテゴリを取得
-    const { items: categories } = await client.getContents<Category>({
-        appUid: APP_UID,
-        modelUid: CATEGORY_MODEL_UID,
+// 前のスポットを取得
+export const getPreviousSpot = cache(
+    async (currentSpot: Spot): Promise<{ slug: string } | null> => {
+        const { createdAt } = currentSpot._sys;
+        const spot = await client.getFirstContent<{ slug: string }>({
+            appUid: env_validation.newt_app_Uid,
+            modelUid: "spot",
+            query: {
+                select: ["slug"],
+                "_sys.createdAt": {
+                    gt: createdAt,
+                },
+                order: ["_sys.createdAt"],
+            },
+        });
+        return spot || null;
+    },
+);
+
+// 次のスポットを取得
+export const getNextSpot = cache(async (currentSpot: Spot): Promise<{ slug: string } | null> => {
+    const { createdAt } = currentSpot._sys;
+    const spot = await client.getFirstContent<{ slug: string }>({
+        appUid: env_validation.newt_app_Uid,
+        modelUid: "spot",
         query: {
-            order: ["_sys.customOrder"],
+            select: ["slug"],
+            "_sys.createdAt": {
+                lt: createdAt,
+            },
+            order: ["-_sys.createdAt"],
+        },
+    });
+    return spot || null;
+});
+
+// タグ一覧を取得（記事のないタグは除外）
+export const getTags = cache(async (): Promise<TagWithCount[]> => {
+    // タグを取得
+    const { items: tags } = await client.getContents<Tag>({
+        appUid: env_validation.newt_app_Uid,
+        modelUid: "tag",
+        query: {
+            limit: 20,
         },
     });
 
-    // 記事のカテゴリ情報を取得
-    const { items: articles } = await client.getContents<{ category: string }>({
-        appUid: APP_UID,
-        modelUid: ARTICLE_MODEL_UID,
+    // スポットのタグ情報を取得
+    const { items: spots } = await client.getContents<{ tags: string[] }>({
+        appUid: env_validation.newt_app_Uid,
+        modelUid: "spot",
         query: {
+            select: ["tags"],
             depth: 0,
-            select: ["category"],
+            limit: 20,
         },
     });
 
-    // カテゴリIDごとの記事数を集計
-    const categoryCountMap: Record<string, number> = {};
-    for (const article of articles) {
-        const categoryId = article.category;
-        if (categoryId) {
-            categoryCountMap[categoryId] = (categoryCountMap[categoryId] || 0) + 1;
-        }
-    }
+    // タグの使用回数を計算
+    const getTagCount = (tag: Tag) => {
+        return spots.filter((spot) => {
+            return spot.tags.some((spotTag: string) => spotTag === tag._id);
+        }).length;
+    };
 
-    // 記事が存在するカテゴリのみをフィルタリング
-    const validCategories = categories.filter((category) => categoryCountMap[category._id] > 0);
+    // タグの使用回数を追加し、記事のないタグを除外
+    const tagsWithCount: TagWithCount[] = tags
+        .map((tag) => ({
+            ...tag,
+            count: getTagCount(tag),
+        }))
+        .filter((tag) => tag.count > 0);
 
-    return validCategories;
+    return tagsWithCount;
 });
 
-// 特定のカテゴリを取得
-export const getCategory = cache(async (slug: string): Promise<Category | null> => {
+// 特定のスラッグのタグを取得
+export const getTag = cache(async (slug: string): Promise<Tag | null> => {
     if (!slug) return null;
-    return client.getFirstContent<Category>({
-        appUid: APP_UID,
-        modelUid: CATEGORY_MODEL_UID,
-        query: { slug },
+    const tag = await client.getFirstContent<Tag>({
+        appUid: env_validation.newt_app_Uid,
+        modelUid: "tag",
+        query: {
+            slug,
+        },
     });
+    return tag || null;
+});
+
+// 住所を取得
+export const getSpotAddress = cache(
+    async (slug: string): Promise<{ lat: number; lng: number } | null> => {
+        if (!slug) return null;
+        const spot = await client.getFirstContent<Spot>({
+            appUid: env_validation.newt_app_Uid,
+            modelUid: "spot",
+            query: {
+                slug,
+                select: ["address"],
+                depth: 0,
+            },
+        });
+        return spot?.address || null;
+    },
+);
+
+// 営業時間を取得
+export const getSpotOpeningHours = cache(async (slug: string): Promise<string | null> => {
+    if (!slug) return null;
+    const spot = await client.getFirstContent<Spot>({
+        appUid: env_validation.newt_app_Uid,
+        modelUid: "spot",
+        query: {
+            slug,
+            select: ["opening_hours"],
+            depth: 0,
+        },
+    });
+    return spot?.opening_hours || null;
+});
+
+// 最寄駅を取得
+export const getSpotNearestStation = cache(async (slug: string): Promise<string | null> => {
+    if (!slug) return null;
+    const spot = await client.getFirstContent<Spot>({
+        appUid: env_validation.newt_app_Uid,
+        modelUid: "spot",
+        query: {
+            slug,
+            select: ["nearest_station"],
+            depth: 0,
+        },
+    });
+    return spot?.nearest_station || null;
+});
+
+// カテゴリー一覧を取得（記事のないカテゴリーは除外）
+export const getCategories = cache(async (): Promise<Category[]> => {
+    // カテゴリーを取得
+    const { items: categories } = await client.getContents<Category>({
+        appUid: env_validation.newt_app_Uid,
+        modelUid: "category",
+        query: {
+            limit: 20,
+        },
+    });
+
+    // スポットのカテゴリー情報を取得
+    const { items: spots } = await client.getContents<{ category: string }>({
+        appUid: env_validation.newt_app_Uid,
+        modelUid: "spot",
+        query: {
+            select: ["category"],
+            depth: 0,
+            limit: 20,
+        },
+    });
+
+    // カテゴリーIDの使用回数を計算
+    const categoryIdsWithSpots = new Set(spots.map((spot) => spot.category).filter(Boolean));
+
+    // 記事のあるカテゴリーのみを返す
+    const categoriesWithSpots = categories.filter((category) =>
+        categoryIdsWithSpots.has(category._id),
+    );
+
+    return categoriesWithSpots;
 });

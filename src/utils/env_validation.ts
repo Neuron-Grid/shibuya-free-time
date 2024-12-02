@@ -6,8 +6,7 @@ const env_validation: EnvVariables = {
     newt_token: process.env.NEXT_NEWT_API_TOKEN as string,
     newt_api_Type: process.env.NEXT_NEWT_API_TYPE as "cdn" | "api",
     newt_app_Uid: process.env.NEXT_NEWT_APP_UID as string,
-    newt_article_Model_Uid: process.env.NEXT_NEWT_ARTICLE_MODEL_UID as string,
-    newt_category_Model_Uid: process.env.NEXT_NEWT_CATEGORY_MODEL_UID as string,
+    google_map_api: process.env.NEXT_GOOGLE_MAP_API as string,
 };
 
 const validateEnvVariables = (env: EnvVariables): void => {
@@ -31,6 +30,5 @@ interface EnvVariables {
     newt_token: string;
     newt_api_Type: "cdn" | "api";
     newt_app_Uid: string;
-    newt_article_Model_Uid: string;
-    newt_category_Model_Uid: string;
+    google_map_api: string;
 }

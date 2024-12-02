@@ -1,36 +1,49 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## 説明
+サイト名: 渋谷フリータイム
+キャッチフレーズ: 無料でこんなに楽しめる！渋谷の隠れた魅力を発見
 
-## Getting Started
+### 概要
+渋谷区内にある無料で利用できる場所やサービスをまとめたwebサイトを作成する。webサイトでは常に無料で利用できる場所に限定せず、期間限定で無料の場所やサービスなども掲載する。
+例: 無料のコンサートやイベントなど
 
-First, run the development server:
+### 目的
+- 渋谷区内の無料で楽しめるスポットやサービスを一元的に提供し、ユーザーの利便性を高める。
+- 期間限定の無料イベント情報を提供し、ユーザーの新たな発見や体験を促進する。
+- 渋谷区の地域活性化に寄与する。
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### ターゲット
+- 渋谷(渋谷区)で遊びたいけど使えるお金が少ない人
+- 渋谷(渋谷区)で無料で利用できる休憩やリラックスができる場所を求めている人
+- 期間限定のイベントやサービスに関心がある人
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### フォルダ分け
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+'src/app'
+App Router専用のコンポーネント
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+'src/components'
+UIコンポーネント
 
-## Learn More
+'src/features'
+再利用するUIコンポーネント
+レイアウト関連のコンポーネント
 
-To learn more about Next.js, take a look at the following resources:
+'src/hooks'
+再利用可能なロジックを記述する
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+'src/libs'
+データベース接続や汎用的なユーティリティ関数などの共通ライブラリ
+アプリケーションの外部APIとの通信
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+'src/types'
+アプリ全体で共有するTypeScriptの型定義
 
-## Deploy on Vercel
+'src/utils'
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+'public'
+画像やフォントなどの静的ファイル
+
+
+
+	2.	汎用的なツールや低レベル関数 → utils

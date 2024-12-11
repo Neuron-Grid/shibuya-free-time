@@ -1,20 +1,10 @@
-import { getSpots } from "@/libs/newt";
-import type { Spot } from "@/types/newt/spot";
+import { getCategories, getSpots, getTags } from "@/libs/newt";
+import ClientDataDisplay from "@/test/ClientDataDisplay";
 
-export default async function SpotListPage() {
+export default async function DataDisplayPage() {
     const { spots } = await getSpots();
+    const tags = await getTags();
+    const categories = await getCategories();
 
-    return (
-        <div>
-            <h1>スポット一覧</h1>
-            <ul>
-                {spots.map((spot: Spot) => (
-                    <li key={spot._id}>
-                        <h2>{spot.title}</h2>
-                        <p>{spot.Description}</p>
-                    </li>
-                ))}
-            </ul>
-        </div>
-    );
+    return <ClientDataDisplay spots={spots} tags={tags} categories={categories} />;
 }

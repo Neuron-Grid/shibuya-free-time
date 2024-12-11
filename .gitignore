@@ -210,3 +210,4 @@ dist
 .env.local
 *.env
 *.env.local
+*.py

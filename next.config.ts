@@ -13,7 +13,7 @@ const nextConfig: NextConfig = {
         remotePatterns: [
             {
                 protocol: "https",
-                hostname: "storage.googleapis.com",
+                hostname: "maps.googleapis.com",
             },
             {
                 protocol: "https",

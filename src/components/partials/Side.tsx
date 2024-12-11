@@ -1,7 +1,7 @@
 import type { Category } from "@/types/newt/category";
 import type { TagWithCount } from "@/types/newt/tag";
 
-export default function Side({ tags, categories }: SideProps) {
+const Side: React.FC<SideProps> = ({ tags, categories }) => {
     return (
         <aside className="space-y-12">
             {/* タグ一覧 */}
@@ -35,7 +35,9 @@ export default function Side({ tags, categories }: SideProps) {
             </section>
         </aside>
     );
-}
+};
+
+export default Side;
 
 interface SideProps {
     tags: TagWithCount[];

@@ -1,15 +1,11 @@
 import Loading from "@/app/loading";
 import Footer from "@/components/global/Footer";
 import Header from "@/components/global/Header";
-import type { Metadata } from "next";
+import { ThemeProvider } from "next-themes";
+import Head from "next/head";
 import { Suspense } from "react";
 import "./globals.css";
-
-export const metadata: Metadata = {
-    title: "渋谷フリータイム",
-    description: "無料でこんなに楽しめる！渋谷の隠れた魅力を発見",
-    keywords: ["渋谷", "フリータイム", "無料", "格安", "休憩"],
-};
+import Side from "@/components/partials/Side";
 
 export default function RootLayout({
     children,
@@ -17,16 +13,24 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="ja">
-            <Suspense fallback={<Loading />}>
-                <body>
-                    <Header />
-                    <div className="h-4" />
-                    {children}
-                    <div className="h-4" />
-                    <Footer />
-                </body>
-            </Suspense>
+        <html lang="ja" suppressHydrationWarning>
+            <Head>
+                <meta name="robots" content="noindex,nofollow" />
+            </Head>
+            <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+                <Suspense fallback={<Loading />}>
+                    <body className="min-h-screen">
+                        <Header />
+                        <div className="flex flex-col lg:flex-row">
+                            <main className="lg:w-3/4">{children}</main>
+                            <aside className="lg:w-1/4">
+                                <Side tags={[]} categories={[]} />
+                            </aside>
+                        </div>
+                        <Footer />
+                    </body>
+                </Suspense>
+            </ThemeProvider>
         </html>
     );
 }

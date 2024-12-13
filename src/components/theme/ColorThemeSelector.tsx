@@ -7,7 +7,43 @@ import { useEffect, useState } from "react";
 import { IoMdDesktop } from "react-icons/io";
 import { MdOutlineDarkMode, MdOutlineLightMode } from "react-icons/md";
 
-const ColorThemeSelector = () => {
+const Placeholder: React.FC = () => (
+    <div className="rounded border p-2">
+        <div className="size-6" />
+    </div>
+);
+
+const getCurrentThemeIcon = (resolvedTheme: string | undefined) => {
+    switch (resolvedTheme) {
+        case "light":
+            return <MdOutlineLightMode className="text-xl" />;
+        case "dark":
+            return <MdOutlineDarkMode className="text-xl" />;
+        default:
+            return <IoMdDesktop className="text-xl" />;
+    }
+};
+
+const generateMenuItems = (setTheme: (theme: string) => void): MenuItem[] => {
+    const createMenuItem = (id: string, Icon: React.ElementType, label: string) => ({
+        Dropdown_id: id,
+        title: (
+            <div className="flex items-center gap-x-2 md:gap-x-4 lg:gap-x-6">
+                <Icon className="text-xl md:text-2xl lg:text-3xl" />
+                <span className="text-center hidden sm:inline md:text-sm lg:text-base xl:text-lg">{label}</span>
+            </div>
+        ),
+        onClick: () => setTheme(id),
+    });
+
+    return [
+        createMenuItem("light", MdOutlineLightMode, "Light"),
+        createMenuItem("dark", MdOutlineDarkMode, "Dark"),
+        createMenuItem("system", IoMdDesktop, "System"),
+    ];
+};
+
+const ColorThemeSelector: React.FC = () => {
     const [mounted, setMounted] = useState(false);
     const { resolvedTheme, setTheme } = useTheme();
 
@@ -16,54 +52,11 @@ const ColorThemeSelector = () => {
     }, []);
 
     if (!mounted) {
-        return (
-            <div className="rounded border p-2 dark:border-gray-500">
-                <div className="size-6" />
-            </div>
-        );
+        return <Placeholder />;
     }
 
-    const currentThemeIcon =
-        resolvedTheme === "light" ? (
-            <MdOutlineLightMode className="text-xl" />
-        ) : resolvedTheme === "dark" ? (
-            <MdOutlineDarkMode className="text-xl" />
-        ) : (
-            <IoMdDesktop className="text-xl" />
-        );
-
-    const menuItems: MenuItem[] = [
-        {
-            Dropdown_id: "light",
-            title: (
-                <>
-                    <MdOutlineLightMode className="text-lg" />
-                    <span className="ml-2">Light</span>
-                </>
-            ),
-            onClick: () => setTheme("light"),
-        },
-        {
-            Dropdown_id: "dark",
-            title: (
-                <>
-                    <MdOutlineDarkMode className="text-lg" />
-                    <span className="ml-2">Dark</span>
-                </>
-            ),
-            onClick: () => setTheme("dark"),
-        },
-        {
-            Dropdown_id: "system",
-            title: (
-                <>
-                    <IoMdDesktop className="text-lg" />
-                    <span className="ml-2">System</span>
-                </>
-            ),
-            onClick: () => setTheme("system"),
-        },
-    ];
+    const currentThemeIcon = getCurrentThemeIcon(resolvedTheme);
+    const menuItems = generateMenuItems(setTheme);
 
     const dropdownItem: MenuItem = {
         Dropdown_id: "theme-selector",
@@ -72,7 +65,7 @@ const ColorThemeSelector = () => {
     };
 
     return (
-        <div className="relative w-full max-w-full px-4">
+        <div className="relative w-full max-w-full px-4 flex justify-between gap-2">
             <Dropdown item={dropdownItem} />
         </div>
     );

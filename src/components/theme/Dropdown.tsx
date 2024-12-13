@@ -25,55 +25,18 @@ const Dropdown: React.FC<Props> = ({ item }) => {
     };
 
     return (
-        <div className="relative w-full max-w-full">
-            {isOpen && (
-                <div
-                    className="fixed inset-0 z-20 bg-black/40"
-                    onClick={closeDropdown}
-                    onKeyDown={handleKeyDown}
-                    role="button"
-                    tabIndex={0}
-                />
-            )}
+        <div className="relative w-full max-w-full Flexbox">
+            {isOpen && <Overlay onClick={closeDropdown} onKeyDown={handleKeyDown} />}
 
             <div className="relative inline-block text-left">
                 <button
                     type="button"
-                    className="hover:text-blue-400 focus:outline-none flex items-center px-2 py-1"
+                    className="focus:outline-none flex items-center px-2 py-1"
                     onClick={toggleDropdown}
                 >
                     {item.title}
                 </button>
-                <div
-                    className={`absolute top-10 z-30 min-h-24 flex-col py-4 bg-zinc-400 rounded-md shadow-lg transition-all duration-300 
-                    ${isOpen ? "flex" : "hidden"}
-                    w-full sm:left-0 sm:w-full md:w-64`}
-                >
-                    {menuItems.map((subItem) =>
-                        subItem.route ? (
-                            <Link
-                                key={subItem.route}
-                                href={subItem.route}
-                                onClick={closeDropdown}
-                                className="hover:bg-zinc-300 hover:text-zinc-500 px-4 py-2 flex items-center gap-2 w-full"
-                            >
-                                {subItem.title}
-                            </Link>
-                        ) : (
-                            <button
-                                type="button"
-                                key={subItem.Dropdown_id}
-                                onClick={() => {
-                                    if (subItem.onClick) subItem.onClick();
-                                    closeDropdown();
-                                }}
-                                className="text-left hover:bg-zinc-300 hover:text-zinc-500 px-4 py-2 flex items-center gap-2 w-full"
-                            >
-                                {subItem.title}
-                            </button>
-                        ),
-                    )}
-                </div>
+                {isOpen && <MenuItems menuItems={menuItems} closeDropdown={closeDropdown} />}
             </div>
         </div>
     );
@@ -81,6 +44,55 @@ const Dropdown: React.FC<Props> = ({ item }) => {
 
 export default Dropdown;
 
+const Overlay: React.FC<OverlayProps> = ({ onClick, onKeyDown }) => (
+    <div
+        className="fixed inset-0 z-20"
+        onClick={onClick}
+        onKeyDown={onKeyDown}
+        role="button"
+        tabIndex={0}
+    />
+);
+
+const MenuItems: React.FC<MenuItemsProps> = ({ menuItems, closeDropdown }) => (
+    <div className="absolute top-10 z-30 min-h-24 flex-col py-4 dark:border-gray-500 rounded shadow-lg transition-all flex w-full sm:left-0 sm:w-full md:w-64">
+        {menuItems.map((subItem) =>
+            subItem.route ? (
+                <Link
+                    key={subItem.route}
+                    href={subItem.route}
+                    onClick={closeDropdown}
+                    className=" px-4 py-2 flex items-center gap-2 w-full"
+                >
+                    {subItem.title}
+                </Link>
+            ) : (
+                <button
+                    type="button"
+                    key={subItem.Dropdown_id}
+                    onClick={() => {
+                        if (subItem.onClick) subItem.onClick();
+                        closeDropdown();
+                    }}
+                    className="text-left px-4 py-2 flex gap-2 w-full"
+                >
+                    {subItem.title}
+                </button>
+            ),
+        )}
+    </div>
+);
+
 interface Props {
     item: MenuItem;
+}
+
+interface OverlayProps {
+    onClick: () => void;
+    onKeyDown: (event: React.KeyboardEvent) => void;
+}
+
+interface MenuItemsProps {
+    menuItems: MenuItem[];
+    closeDropdown: () => void;
 }

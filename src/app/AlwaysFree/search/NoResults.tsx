@@ -5,7 +5,7 @@ const NoResults: React.FC = () => {
         <div className="flex flex-1 flex-col justify-center items-center">
             <h1 className="text-2xl m-0 mb-1 p-0">見つかりませんでした。</h1>
             <p className="text-lg m-0 p-0 text-center">
-                見つかりませんでした。他のキーワードで検索してみてください。
+                記事が見つかりませんでした。他のキーワードで検索してみてください。
             </p>
         </div>
     );

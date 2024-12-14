@@ -1,4 +1,4 @@
-import { reverseGeocode } from "@/libs/geocode";
+import { reverseGeocode } from "@/features/reverseGeocode";
 import type { Spot } from "@/types/newt/spot";
 
 const getAddresses = async (spots: Spot[]) => {

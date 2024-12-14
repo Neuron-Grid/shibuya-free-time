@@ -16,11 +16,11 @@ const Placeholder: React.FC = () => (
 const getCurrentThemeIcon = (resolvedTheme: string | undefined) => {
     switch (resolvedTheme) {
         case "light":
-            return <MdOutlineLightMode className="text-xl" />;
+            return <MdOutlineLightMode className="text-lg" />;
         case "dark":
-            return <MdOutlineDarkMode className="text-xl" />;
+            return <MdOutlineDarkMode className="text-lg" />;
         default:
-            return <IoMdDesktop className="text-xl" />;
+            return <IoMdDesktop className="text-lg" />;
     }
 };
 
@@ -29,8 +29,10 @@ const generateMenuItems = (setTheme: (theme: string) => void): MenuItem[] => {
         Dropdown_id: id,
         title: (
             <div className="flex items-center gap-x-2 md:gap-x-4 lg:gap-x-6">
-                <Icon className="text-xl md:text-2xl lg:text-3xl" />
-                <span className="text-center hidden sm:inline md:text-sm lg:text-base xl:text-lg">{label}</span>
+                <Icon className="text-lg md:text-2xl lg:text-3xl" />
+                <span className="text-center hidden sm:inline md:text-sm lg:text-base xl:text-lg">
+                    {label}
+                </span>
             </div>
         ),
         onClick: () => setTheme(id),
@@ -65,7 +67,7 @@ const ColorThemeSelector: React.FC = () => {
     };
 
     return (
-        <div className="relative w-full max-w-full px-4 flex justify-between gap-2">
+        <div className="container relative w-full max-w-full px-4 flex justify-between gap-2">
             <Dropdown item={dropdownItem} />
         </div>
     );

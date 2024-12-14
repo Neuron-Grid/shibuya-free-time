@@ -1,7 +1,7 @@
 import { getCategories, getSpots, getTags } from "@/libs/always_free/newt";
 import ClientDataDisplay from "@/test/ClientDataDisplay";
 
-export default async function DataDisplayPage() {
+const DataDisplayPage = async () => {
     const { spots } = await getSpots();
     const tags = await getTags();
     const categories = await getCategories();
@@ -11,4 +11,6 @@ export default async function DataDisplayPage() {
             <ClientDataDisplay spots={spots} tags={tags} categories={categories} />
         </div>
     );
-}
+};
+
+export default DataDisplayPage;

@@ -1,5 +1,5 @@
 import NoResults from "@/features/search/NoResults";
-import { getSpots } from "@/libs/newt";
+import { getSpots } from "@/libs/always_free/newt";
 import type { Spot } from "@/types/newt/spot";
 import SanitizedContent from "@/utils/SanitizedContent";
 import { htmlToText } from "html-to-text";

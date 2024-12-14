@@ -26,7 +26,7 @@ const FooterText: React.FC = () => (
         {" | "}
         <FooterLink href="/privacy-policy" text="プライバシーポリシー" />
         <br />
-        <FooterLink href="/open-source-licenses" text="Open Source Licenses" />
+        <FooterLink href="/licenses" text="Open Source Licenses" />
         <br />
         Hosted by <FooterLink href="https://vercel.com/" text="Vercel" rel="noopener noreferrer" />
     </span>

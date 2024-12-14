@@ -6,7 +6,7 @@ import { useState } from "react";
 import { RxCross2, RxHamburgerMenu } from "react-icons/rx";
 
 const navLinks: NavLink[] = [
-    { href: "/always-free", label: "常時無料" },
+    { href: "/AlwaysFree", label: "常時無料" },
     { href: "/limited-free", label: "期間限定無料" },
 ];
 

@@ -1,28 +1,29 @@
+import { formatDate } from "@/libs/date";
 import type { Spot } from "@/types/newt/spot";
 import type { Tag } from "@/types/newt/tag";
 import Image from "next/image";
 import Link from "next/link";
 import { MdImageNotSupported } from "react-icons/md";
 
-function CoverImage({ src, alt }: { src: string; alt: string }) {
+const CoverImage = ({ src, alt }: { src: string; alt: string }) => {
     return (
-        <div className="relative mb-3 flex h-36 w-full shrink-0 items-center justify-center overflow-hidden rounded sm:mb-0 sm:mr-7 sm:h-36 sm:w-72">
+        <div className="container relative mb-3 flex h-36 w-full shrink-0 items-center justify-center overflow-hidden rounded sm:mb-0 sm:mr-7 sm:h-36 sm:w-72">
             <Image src={src} alt={alt} fill className="object-contain" loading="lazy" />
         </div>
     );
-}
+};
 
-function NoCoverImage() {
+const NoCoverImage = () => {
     return (
-        <div className="flex h-36 w-full items-center justify-center sm:w-72">
+        <div className="container flex h-36 w-full items-center justify-center sm:w-72">
             <MdImageNotSupported size={40} color="#CCCCCC" />
         </div>
     );
-}
+};
 
-function Tags({ tags }: { tags: Tag[] }) {
+const Tags = ({ tags }: { tags: Tag[] }) => {
     return (
-        <ul className="mb-2 flex flex-wrap">
+        <ul className="container mb-2 flex flex-wrap">
             {tags.map((tag) => (
                 <li key={tag._id} className="mb-1 mr-1 list-none rounded border px-1 text-base">
                     #{tag.name}
@@ -30,18 +31,9 @@ function Tags({ tags }: { tags: Tag[] }) {
             ))}
         </ul>
     );
-}
+};
 
-function formatDate(dateStr: string): string {
-    const date = new Date(dateStr);
-    return date.toLocaleDateString("ja-JP", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-    });
-}
-
-export function SpotCard({ Spot }: { Spot: Spot }) {
+export const SpotCard = ({ Spot, href }: { Spot: Spot; href?: string }) => {
     const { image, title, slug, tags, _sys } = Spot;
     const formattedDate = formatDate(_sys.createdAt);
 
@@ -50,7 +42,7 @@ export function SpotCard({ Spot }: { Spot: Spot }) {
             <Link
                 className="mb-10 block overflow-hidden border-b p-0 no-underline last:mb-7 sm:mb-9 sm:flex sm:pb-9"
                 rel="me"
-                href={`/Spots/${slug}`}
+                href={href || `/Spots/${slug}`}
             >
                 {image ? (
                     <CoverImage src={image.src} alt={title} />
@@ -69,4 +61,6 @@ export function SpotCard({ Spot }: { Spot: Spot }) {
             </Link>
         </div>
     );
-}
+};
+
+export default SpotCard;

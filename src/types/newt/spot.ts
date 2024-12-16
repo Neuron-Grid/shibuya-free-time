@@ -1,5 +1,5 @@
-import type { Category } from "@/types/newt/category";
-import type { Tag } from "@/types/newt/tag";
+import type { Category } from "@/types/newt/Category";
+import type { Tag } from "@/types/newt/Tag";
 import type { Content, Image } from "newt-client-js";
 
 export interface Spot extends Content {

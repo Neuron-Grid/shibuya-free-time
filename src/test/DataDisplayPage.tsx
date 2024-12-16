@@ -1,4 +1,4 @@
-import { getCategories, getSpots, getTags } from "@/libs/always_free/newt";
+import { getCategories, getSpots, getTags } from "@/libs/newt";
 import ClientDataDisplay from "@/test/ClientDataDisplay";
 
 export default async function DataDisplayPage() {

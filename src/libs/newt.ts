@@ -1,6 +1,6 @@
-import type { Category } from "@/types/newt/category";
-import type { Spot } from "@/types/newt/spot";
-import type { Tag, TagWithCount } from "@/types/newt/tag";
+import type { Category } from "@/types/newt/Category";
+import type { Spot } from "@/types/newt/Spot";
+import type { Tag, TagWithCount } from "@/types/newt/Tag";
 import { env_validation } from "@/utils/env_validation";
 import { createClient } from "newt-client-js";
 import type { AppMeta, GetContentsQuery } from "newt-client-js";

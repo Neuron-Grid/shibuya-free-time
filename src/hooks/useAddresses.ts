@@ -1,5 +1,5 @@
 import { reverseGeocode } from "@/features/reverseGeocode";
-import type { Spot } from "@/types/newt/spot";
+import type { Spot } from "@/types/newt/Spot";
 
 const getAddresses = async (spots: Spot[]) => {
     const addressMap: Record<string, string> = {};

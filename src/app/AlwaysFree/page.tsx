@@ -1,8 +1,10 @@
-import { getSpots } from "@/libs/always_free/newt";
+import { getSpots } from "@/libs/newt";
+import type { Spot } from "@/types/newt/Spot";
+import type { Tag } from "@/types/newt/Tag";
 import Image from "next/image";
 import React from "react";
 
-const SpotCard = ({ spot }) => {
+const SpotCard = ({ spot }: { spot: Spot }) => {
     const { image, title, category, tags, address } = spot;
     return (
         <li
@@ -26,12 +28,14 @@ const SpotCard = ({ spot }) => {
             )}
             {tags?.length > 0 && (
                 <p className="text-sm text-gray-600">
-                    <span className="font-medium">タグ:</span> {tags.map((tag: { name: any; }) => tag.name).join(", ")}
+                    <span className="font-medium">タグ:</span>{" "}
+                    {tags.map((tag: Tag) => tag.name).join(", ")}
                 </p>
             )}
             {address && (
                 <p className="text-sm text-gray-600">
-                    <span className="font-medium">住所:</span> 緯度 {address.lat}, 経度 {address.lng}
+                    <span className="font-medium">住所:</span> 緯度 {address.lat}, 経度{" "}
+                    {address.lng}
                 </p>
             )}
         </li>

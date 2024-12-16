@@ -1,4 +1,4 @@
-import { getTags } from "@/libs/always_free/newt";
+import { getTags } from "@/libs/newt";
 import React from "react";
 
 const TagsPage = async () => {

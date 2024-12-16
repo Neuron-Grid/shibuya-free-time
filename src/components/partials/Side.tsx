@@ -1,4 +1,4 @@
-import { getCategories, getTags } from "@/libs/always_free/newt";
+import { getCategories, getTags } from "@/libs/newt";
 import Link from "next/link";
 import type React from "react";
 

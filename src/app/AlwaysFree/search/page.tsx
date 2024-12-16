@@ -1,6 +1,6 @@
-import NoResults from "@/features/search/NoResults";
-import { getSpots } from "@/libs/always_free/newt";
-import type { Spot } from "@/types/newt/spot";
+import NoResults from "@/app/AlwaysFree/search/NoResults";
+import { getSpots } from "@/libs/newt";
+import type { Spot } from "@/types/newt/Spot";
 import SanitizedContent from "@/utils/SanitizedContent";
 import { htmlToText } from "html-to-text";
 import Link from "next/link";

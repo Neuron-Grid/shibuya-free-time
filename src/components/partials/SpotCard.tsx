@@ -46,7 +46,7 @@ export const SpotCard = ({ spot, href, resolvedAddress }: SpotCardProps) => {
     return (
         <div>
             <Link
-                className="block overflow-hidden border-b pb-9 no-underline flex flex-col sm:flex-row"
+                className="block overflow-hidden border-b pb-9 no-underline flex-col sm:flex-row"
                 rel="me"
                 href={href || `/Spots/${slug}`}
             >

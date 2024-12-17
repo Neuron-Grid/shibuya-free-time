@@ -1,3 +1,4 @@
+"use client";
 import { formatDate } from "@/libs/date";
 import type { Spot } from "@/types/newt/Spot";
 import type { Tag } from "@/types/newt/Tag";
@@ -33,8 +34,8 @@ const Tags = ({ tags }: { tags: Tag[] }) => {
     );
 };
 
-export const SpotCard = ({ Spot, href }: { Spot: Spot; href?: string }) => {
-    const { image, title, slug, tags, _sys } = Spot;
+export const SpotCard = ({ spot, href, resolvedAddress }: SpotCardProps) => {
+    const { image, title, slug, tags, _sys } = spot;
     const formattedDate = formatDate(_sys.createdAt);
 
     return (
@@ -57,6 +58,9 @@ export const SpotCard = ({ Spot, href }: { Spot: Spot; href?: string }) => {
                     </h3>
                     <p className="mb-2">{formattedDate}</p>
                     <Tags tags={tags} />
+                    {resolvedAddress && (
+                        <p className="mt-2 text-sm text-gray-600">住所: {resolvedAddress}</p>
+                    )}
                 </div>
             </Link>
         </div>
@@ -64,3 +68,9 @@ export const SpotCard = ({ Spot, href }: { Spot: Spot; href?: string }) => {
 };
 
 export default SpotCard;
+
+type SpotCardProps = {
+    spot: Spot;
+    href?: string;
+    resolvedAddress?: string;
+};

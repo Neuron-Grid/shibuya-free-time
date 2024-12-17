@@ -7,7 +7,7 @@ import { RxCross2, RxHamburgerMenu } from "react-icons/rx";
 
 const navLinks: NavLink[] = [
     { href: "/AlwaysFree", label: "常時無料" },
-    { href: "/limited-free", label: "期間限定無料" },
+    { href: "/LimitedFree", label: "期間限定無料" },
 ];
 
 const Header: React.FC = () => {
@@ -20,9 +20,12 @@ const Header: React.FC = () => {
             <div className="container mx-auto flex items-center justify-between p-4">
                 {/* サイトタイトルとナビゲーション */}
                 <div className="flex items-center space-x-6">
-                    <h1 className="text-light-text dark:text-dark-text font-semibold text-xl">
+                    <Link
+                        className="text-light-text dark:text-dark-text font-semibold text-xl"
+                        href="/"
+                    >
                         渋谷フリータイム
-                    </h1>
+                    </Link>
                     <nav className="hidden md:block">
                         <ul className="flex space-x-4">
                             {navLinks.map((link) => (

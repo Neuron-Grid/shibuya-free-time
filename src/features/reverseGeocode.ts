@@ -2,7 +2,7 @@ import { env_validation } from "@/utils/env_validation";
 import axios from "axios";
 
 export const reverseGeocode = async (lat: number, lng: number): Promise<string | null> => {
-    const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${env_validation.google_map_api}`;
+    const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${env_validation.google_map_api}&language=ja`;
 
     try {
         const { data } = await axios.get(url);

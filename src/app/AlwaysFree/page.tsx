@@ -7,7 +7,7 @@ import React from "react";
 const AlwaysFreePage = async () => {
     const { spots } = await getSpots();
 
-    // 事前にサーバーサイドで住所を取得
+    // サーバーサイドで住所をまとめて取得
     const addressMap = await getAddresses(spots);
 
     return (
@@ -17,7 +17,7 @@ const AlwaysFreePage = async () => {
                 <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                     {spots.map((spot: Spot) => (
                         <li key={spot._id}>
-                            {/* 住所をpropsとして渡す */}
+                            {/* サーバーサイドで取得した住所を props として SpotCard に渡す */}
                             <SpotCard spot={spot} resolvedAddress={addressMap[spot._id]} />
                         </li>
                     ))}

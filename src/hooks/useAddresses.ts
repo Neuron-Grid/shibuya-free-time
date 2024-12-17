@@ -1,3 +1,4 @@
+// 住所取得ロジックの切り出し
 import { reverseGeocode } from "@/features/reverseGeocode";
 import type { Spot } from "@/types/newt/Spot";
 

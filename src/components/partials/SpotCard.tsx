@@ -1,4 +1,3 @@
-"use client";
 import { formatDate } from "@/libs/date";
 import type { Spot } from "@/types/newt/Spot";
 import type { Tag } from "@/types/newt/Tag";
@@ -72,5 +71,5 @@ export default SpotCard;
 type SpotCardProps = {
     spot: Spot;
     href?: string;
-    resolvedAddress?: string;
+    resolvedAddress?: string; // サーバーサイドで取得した住所を受け取る
 };

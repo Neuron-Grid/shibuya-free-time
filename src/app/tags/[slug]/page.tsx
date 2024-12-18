@@ -1,4 +1,4 @@
-import SpotCard from "@/components/partials/SpotCard";
+import { SpotCard } from "@/components/partials/SpotCard";
 import { getSpots, getTagslug } from "@/libs/newt";
 
 const TagsPage = async ({ params: { slug } }: { params: { slug: string } }) => {

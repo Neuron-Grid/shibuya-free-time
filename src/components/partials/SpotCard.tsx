@@ -7,15 +7,15 @@ import { MdImageNotSupported } from "react-icons/md";
 
 const CoverImage = ({ src, alt }: { src: string; alt: string }) => {
     return (
-        <div className="relative mb-3 h-36 w-full flex-shrink-0 items-center justify-center overflow-hidden rounded sm:mb-0 sm:mr-7 sm:h-36 sm:w-72 flex">
-            <Image src={src} alt={alt} fill className="object-contain" loading="lazy" />
+        <div className="relative h-48 w-full sm:h-auto sm:w-48 flex-shrink-0 overflow-hidden">
+            <Image src={src} alt={alt} fill className="object-cover" loading="lazy" />
         </div>
     );
 };
 
 const NoCoverImage = () => {
     return (
-        <div className="mb-3 h-36 w-full flex-shrink-0 items-center justify-center rounded border sm:mb-0 sm:mr-7 sm:h-36 sm:w-72 flex">
+        <div className="flex h-48 w-full sm:h-auto sm:w-48 flex-shrink-0 items-center justify-center bg-grayscale-100 dark:bg-grayscale-800 overflow-hidden">
             <MdImageNotSupported size={40} color="#CCCCCC" />
         </div>
     );
@@ -23,9 +23,12 @@ const NoCoverImage = () => {
 
 const Tags = ({ tags }: { tags: Tag[] }) => {
     return (
-        <ul className="mb-2 flex flex-wrap">
+        <ul className="mb-2 flex flex-wrap gap-1">
             {tags.map((tag) => (
-                <li key={tag._id} className="mb-1 mr-1 list-none rounded border px-1 text-base">
+                <li
+                    key={tag._id}
+                    className="list-none rounded bg-grayscale-200 dark:bg-grayscale-700 px-2 py-1 text-sm text-grayscale-700 dark:text-grayscale-200"
+                >
                     #{tag.name}
                 </li>
             ))}
@@ -38,29 +41,33 @@ export const SpotCard = ({ spot, href, resolvedAddress }: SpotCardProps) => {
     const formattedDate = formatDate(_sys.createdAt);
 
     return (
-        <div className="container">
+        <div className="w-full">
             <Link
-                className="flex flex-col sm:flex-row overflow-hidden border-b pb-9 no-underline"
-                rel="me"
                 href={href || `/Spots/${slug}`}
+                className="block overflow-hidden rounded-lg bg-light-background dark:bg-dark-background shadow-lg transition-transform hover:-translate-y-1 hover:shadow-xl no-underline"
+                rel="me"
             >
-                {image ? <CoverImage src={image.src} alt={title} /> : <NoCoverImage />}
-                <div className="flex-1">
-                    <h3 className="mb-2 line-clamp-2 overflow-hidden text-2xl leading-tight">
-                        {title}
-                    </h3>
-                    <p className="mb-2">{formattedDate}</p>
-                    <Tags tags={tags} />
-                    {resolvedAddress && (
-                        <p className="mt-2 text-sm text-gray-600">住所: {resolvedAddress}</p>
-                    )}
+                <div className="flex flex-col sm:flex-row">
+                    {image ? <CoverImage src={image.src} alt={title} /> : <NoCoverImage />}
+                    <div className="p-4 flex-1">
+                        <h3 className="mb-2 line-clamp-2 text-2xl font-semibold text-light-text dark:text-dark-text group-hover:text-light-accent dark:group-hover:text-dark-accent">
+                            {title}
+                        </h3>
+                        <p className="mb-2 text-sm text-grayscale-500 dark:text-grayscale-400">
+                            {formattedDate}
+                        </p>
+                        <Tags tags={tags} />
+                        {resolvedAddress && (
+                            <p className="mt-2 text-sm text-grayscale-600 dark:text-grayscale-300">
+                                住所: {resolvedAddress}
+                            </p>
+                        )}
+                    </div>
                 </div>
             </Link>
         </div>
     );
 };
-
-export default SpotCard;
 
 type SpotCardProps = {
     spot: Spot;

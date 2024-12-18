@@ -13,13 +13,15 @@ const AlwaysFreePage = async () => {
     const addressMap = await getAddresses(spots);
 
     return (
-        <div className="container mx-auto flex items-center justify-between p-4">
-            <section className="mb-12">
-                <h2 className="text-xl font-semibold mb-4">スポット一覧</h2>
-                <ul className="grid grid-cols-1 gap-8">
+        <div className="container mx-auto flex items-center justify-between p-4 bg-light-background dark:bg-dark-background">
+            <section className="mb-12 w-full">
+                <h2 className="text-xl font-semibold mb-4 text-light-text dark:text-dark-text">
+                    スポット一覧
+                </h2>
+                <ul>
                     {spots.map((spot: Spot) => (
                         <li key={spot._id}>
-                            <SpotCard spot={spot} resolvedAddress={addressMap[spot._id]} />
+                            <SpotCard spot={spot} />
                         </li>
                     ))}
                 </ul>

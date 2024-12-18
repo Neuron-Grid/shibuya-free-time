@@ -15,7 +15,7 @@ const CoverImage = ({ src, alt }: { src: string; alt: string }) => {
 
 const NoCoverImage = () => {
     return (
-        <div className="mb-3 h-36 w-full flex-shrink-0 items-center justify-center rounded border bg-gray-100 sm:mb-0 sm:mr-7 sm:h-36 sm:w-72 flex">
+        <div className="mb-3 h-36 w-full flex-shrink-0 items-center justify-center rounded border sm:mb-0 sm:mr-7 sm:h-36 sm:w-72 flex">
             <MdImageNotSupported size={40} color="#CCCCCC" />
         </div>
     );
@@ -33,25 +33,18 @@ const Tags = ({ tags }: { tags: Tag[] }) => {
     );
 };
 
-type SpotCardProps = {
-    spot: Spot;
-    href?: string;
-    resolvedAddress?: string;
-};
-
 export const SpotCard = ({ spot, href, resolvedAddress }: SpotCardProps) => {
     const { image, title, slug, tags, _sys } = spot;
     const formattedDate = formatDate(_sys.createdAt);
 
     return (
-        <div>
+        <div className="container">
             <Link
-                className="block overflow-hidden border-b pb-9 no-underline flex-col sm:flex-row"
+                className="flex flex-col sm:flex-row overflow-hidden border-b pb-9 no-underline"
                 rel="me"
                 href={href || `/Spots/${slug}`}
             >
                 {image ? <CoverImage src={image.src} alt={title} /> : <NoCoverImage />}
-
                 <div className="flex-1">
                     <h3 className="mb-2 line-clamp-2 overflow-hidden text-2xl leading-tight">
                         {title}
@@ -68,3 +61,9 @@ export const SpotCard = ({ spot, href, resolvedAddress }: SpotCardProps) => {
 };
 
 export default SpotCard;
+
+type SpotCardProps = {
+    spot: Spot;
+    href?: string;
+    resolvedAddress?: string;
+};

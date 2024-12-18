@@ -13,7 +13,7 @@ const AlwaysFreePage = async () => {
     const addressMap = await getAddresses(spots);
 
     return (
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto flex items-center justify-between p-4">
             <section className="mb-12">
                 <h2 className="text-xl font-semibold mb-4">スポット一覧</h2>
                 <ul className="grid grid-cols-1 gap-8">

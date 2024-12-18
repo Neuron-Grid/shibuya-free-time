@@ -19,7 +19,7 @@ const Side: React.FC = async () => {
                                     href={`/tags/${tag.slug}`}
                                     className="text-blue-500 hover:underline"
                                 >
-                                    {tag.name} ({tag.count})
+                                    {tag.name}
                                 </Link>
                             </li>
                         ))}

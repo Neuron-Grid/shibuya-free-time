@@ -27,18 +27,20 @@ export default function RootLayout({
     return (
         <html lang="ja" suppressHydrationWarning>
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-                <Suspense fallback={<Loading />}>
-                    <body>
-                        <Header />
-                        <div className="flex flex-col lg:flex-row">
-                            <main className="lg:w-3/4">{children}</main>
-                            <aside className="lg:w-1/4">
-                                <Side />
-                            </aside>
-                        </div>
-                        <Footer />
-                    </body>
-                </Suspense>
+                <body className="min-h-screen flex flex-col">
+                    <div className="bg-light-background dark:bg-dark-background flex flex-col flex-grow">
+                        <Suspense fallback={<Loading />}>
+                            <Header />
+                            <div className="flex flex-col lg:flex-row flex-grow">
+                                <main className="lg:w-3/4 flex-grow">{children}</main>
+                                <aside className="lg:w-1/4">
+                                    <Side />
+                                </aside>
+                            </div>
+                            <Footer />
+                        </Suspense>
+                    </div>
+                </body>
             </ThemeProvider>
         </html>
     );

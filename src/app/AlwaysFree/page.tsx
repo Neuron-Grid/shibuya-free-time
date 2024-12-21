@@ -4,8 +4,6 @@ import { getSpots } from "@/libs/newt";
 import type { Spot } from "@/types/newt/Spot";
 import React from "react";
 
-export const experimental_ppr = true;
-
 const AlwaysFreePage = async () => {
     const { spots } = await getSpots();
 

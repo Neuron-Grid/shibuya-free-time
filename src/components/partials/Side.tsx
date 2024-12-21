@@ -42,6 +42,15 @@ const Side: React.FC = async () => {
                         ))}
                     </ul>
                 </section>
+
+                {/* メールマガジンに登録するページに誘導 */}
+                <section>
+                    <h2 className="text-xl font-bold mb-4">メールマガジン</h2>
+                    <p>新着記事をメールでお届けします。</p>
+                    <Link href="/newsletter" className="text-blue-500 hover:underline">
+                        メールマガジンに登録する
+                    </Link>
+                </section>
             </aside>
         </div>
     );

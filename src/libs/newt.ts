@@ -8,15 +8,15 @@ import { cache } from "react";
 
 // Newtのクライアントを作成
 const client = createClient({
-    spaceUid: env_validation.newt_space_Uid,
+    spaceUid: env_validation.newt_space_uid,
     token: env_validation.newt_token,
-    apiType: env_validation.newt_api_Type,
+    apiType: env_validation.newt_api_type,
 });
 
 // アプリケーションのメタデータを取得
 export const getApp = cache(async (): Promise<AppMeta> => {
     const app = await client.getApp({
-        appUid: env_validation.newt_app_Uid,
+        appUid: env_validation.newt_app_uid,
     });
     return app;
 });
@@ -25,7 +25,7 @@ export const getApp = cache(async (): Promise<AppMeta> => {
 export const getSpots = cache(
     async (query?: GetContentsQuery): Promise<{ spots: Spot[]; total: number }> => {
         const { items: spots, total } = await client.getContents<Spot>({
-            appUid: env_validation.newt_app_Uid,
+            appUid: env_validation.newt_app_uid,
             modelUid: "spot",
             query: {
                 depth: 2,
@@ -40,7 +40,7 @@ export const getSpots = cache(
 export const getSpot = cache(async (slug: string): Promise<Spot | null> => {
     if (!slug) return null;
     const spot = await client.getFirstContent<Spot>({
-        appUid: env_validation.newt_app_Uid,
+        appUid: env_validation.newt_app_uid,
         modelUid: "spot",
         query: {
             depth: 2,
@@ -55,7 +55,7 @@ export const getPreviousSpot = cache(
     async (currentSpot: Spot): Promise<{ slug: string } | null> => {
         const { createdAt } = currentSpot._sys;
         const spot = await client.getFirstContent<{ slug: string }>({
-            appUid: env_validation.newt_app_Uid,
+            appUid: env_validation.newt_app_uid,
             modelUid: "spot",
             query: {
                 select: ["slug"],
@@ -73,7 +73,7 @@ export const getPreviousSpot = cache(
 export const getNextSpot = cache(async (currentSpot: Spot): Promise<{ slug: string } | null> => {
     const { createdAt } = currentSpot._sys;
     const spot = await client.getFirstContent<{ slug: string }>({
-        appUid: env_validation.newt_app_Uid,
+        appUid: env_validation.newt_app_uid,
         modelUid: "spot",
         query: {
             select: ["slug"],
@@ -89,7 +89,7 @@ export const getNextSpot = cache(async (currentSpot: Spot): Promise<{ slug: stri
 export const getTags = cache(async (): Promise<TagWithCount[]> => {
     // タグを取得
     const { items: tags } = await client.getContents<Tag>({
-        appUid: env_validation.newt_app_Uid,
+        appUid: env_validation.newt_app_uid,
         modelUid: "tag",
         query: {
             limit: 20,
@@ -98,7 +98,7 @@ export const getTags = cache(async (): Promise<TagWithCount[]> => {
 
     // スポットのタグ情報を取得
     const { items: spots } = await client.getContents<{ tags: string[] }>({
-        appUid: env_validation.newt_app_Uid,
+        appUid: env_validation.newt_app_uid,
         modelUid: "spot",
         query: {
             select: ["tags"],
@@ -129,7 +129,7 @@ export const getTags = cache(async (): Promise<TagWithCount[]> => {
 export const getTagslug = cache(async (slug: string): Promise<Tag | null> => {
     if (!slug) return null;
     const tag = await client.getFirstContent<Tag>({
-        appUid: env_validation.newt_app_Uid,
+        appUid: env_validation.newt_app_uid,
         modelUid: "tag",
         query: {
             slug,
@@ -143,7 +143,7 @@ export const getSpotAddress = cache(
     async (slug: string): Promise<{ lat: number; lng: number } | null> => {
         if (!slug) return null;
         const spot = await client.getFirstContent<Spot>({
-            appUid: env_validation.newt_app_Uid,
+            appUid: env_validation.newt_app_uid,
             modelUid: "spot",
             query: {
                 slug,
@@ -159,7 +159,7 @@ export const getSpotAddress = cache(
 export const getSpotOpeningHours = cache(async (slug: string): Promise<string | null> => {
     if (!slug) return null;
     const spot = await client.getFirstContent<Spot>({
-        appUid: env_validation.newt_app_Uid,
+        appUid: env_validation.newt_app_uid,
         modelUid: "spot",
         query: {
             slug,
@@ -174,7 +174,7 @@ export const getSpotOpeningHours = cache(async (slug: string): Promise<string | 
 export const getSpotNearestStation = cache(async (slug: string): Promise<string | null> => {
     if (!slug) return null;
     const spot = await client.getFirstContent<Spot>({
-        appUid: env_validation.newt_app_Uid,
+        appUid: env_validation.newt_app_uid,
         modelUid: "spot",
         query: {
             slug,
@@ -190,12 +190,12 @@ export const getCategories = cache(async (): Promise<Category[]> => {
     // カテゴリーとスポットのデータを並行して取得
     const [{ items: categories }, { items: spots }] = await Promise.all([
         client.getContents<Category>({
-            appUid: env_validation.newt_app_Uid,
+            appUid: env_validation.newt_app_uid,
             modelUid: "category",
             query: { limit: 20 },
         }),
         client.getContents<{ category: string }>({
-            appUid: env_validation.newt_app_Uid,
+            appUid: env_validation.newt_app_uid,
             modelUid: "spot",
             query: {
                 select: ["category"],

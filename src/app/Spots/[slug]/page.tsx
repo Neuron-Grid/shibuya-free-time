@@ -3,11 +3,12 @@ import { getSpot } from "@/libs/newt";
 import SanitizedContent from "@/utils/SanitizedContent";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import React from "react";
 import { MdImageNotSupported } from "react-icons/md";
 
-const SpotPage = async ({ params }: SpotPageProps) => {
-    const spot = await getSpot(params.slug);
+const SpotsPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
+    const { slug } = await params;
+
+    const spot = await getSpot(slug);
 
     if (!spot) {
         notFound();
@@ -18,7 +19,6 @@ const SpotPage = async ({ params }: SpotPageProps) => {
 
     return (
         <div className="container mx-auto p-4 bg-light-background dark:bg-dark-background min-h-screen">
-            {/* ここで画像を表示 */}
             {spot.image ? (
                 <div className="relative w-full h-64 mb-4 overflow-hidden">
                     <Image
@@ -48,10 +48,4 @@ const SpotPage = async ({ params }: SpotPageProps) => {
     );
 };
 
-export default SpotPage;
-
-interface SpotPageProps {
-    params: {
-        slug: string;
-    };
-}
+export default SpotsPage;

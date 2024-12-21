@@ -2,11 +2,12 @@
 // 基本的にこのファイルを経由して環境変数を取得する
 
 const env_validation: EnvVariables = {
-    newt_space_Uid: process.env.NEXT_NEWT_SPACE_UID as string,
+    newt_space_uid: process.env.NEXT_NEWT_SPACE_UID as string,
     newt_token: process.env.NEXT_NEWT_API_TOKEN as string,
-    newt_api_Type: process.env.NEXT_NEWT_API_TYPE as "cdn" | "api",
-    newt_app_Uid: process.env.NEXT_NEWT_APP_UID as string,
+    newt_api_type: process.env.NEXT_NEWT_API_TYPE as "cdn" | "api",
+    newt_app_uid: process.env.NEXT_NEWT_APP_UID as string,
     google_map_api: process.env.NEXT_GOOGLE_MAP_API as string,
+    // form_action_url: process.env.FORM_ACTION_URL as string,
 };
 
 const validateEnvVariables = (env: EnvVariables): void => {
@@ -26,9 +27,10 @@ validateEnvVariables(env_validation);
 export { env_validation };
 
 interface EnvVariables {
-    newt_space_Uid: string;
+    newt_space_uid: string;
     newt_token: string;
-    newt_api_Type: "cdn" | "api";
-    newt_app_Uid: string;
+    newt_api_type: "cdn" | "api";
+    newt_app_uid: string;
     google_map_api: string;
+    // form_action_url: string;
 }

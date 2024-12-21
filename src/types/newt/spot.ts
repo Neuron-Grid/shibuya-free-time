@@ -23,5 +23,5 @@ export interface Address {
 export interface SpotMeta {
     title?: string; // タイトル（1行）
     description?: string; // ディスクリプション（1行）
-    ogImage?: Image;
+    ogImage?: Image; // 画像（1枚）
 }

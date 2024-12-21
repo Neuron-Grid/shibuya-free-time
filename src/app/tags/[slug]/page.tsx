@@ -1,7 +1,10 @@
 import { SpotCard } from "@/components/partials/SpotCard";
 import { getSpots, getTagslug } from "@/libs/newt";
 
-const TagsPage = async ({ params: { slug } }: { params: { slug: string } }) => {
+const TagsPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
+    // paramsを非同期に解決
+    const { slug } = await params;
+
     const tag = await getTagslug(slug);
 
     if (!tag) {

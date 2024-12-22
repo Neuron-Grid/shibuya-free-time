@@ -1,14 +1,10 @@
 import { SpotCard } from "@/components/partials/SpotCard";
-import getAddresses from "@/hooks/useAddresses";
 import { getSpots } from "@/libs/newt";
 import type { Spot } from "@/types/newt/Spot";
 import React from "react";
 
 const AlwaysFreePage = async () => {
     const { spots } = await getSpots();
-
-    // サーバーサイドで住所をまとめて取得
-    const addressMap = await getAddresses(spots);
 
     return (
         <div className="container mx-auto flex items-center justify-between p-4 bg-light-background dark:bg-dark-background">

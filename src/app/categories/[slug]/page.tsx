@@ -2,14 +2,8 @@ import { SpotCard } from "@/components/partials/SpotCard";
 import { getSpots } from "@/libs/newt";
 import type { Spot } from "@/types/newt/Spot";
 
-type Props = {
-    params: Promise<{
-        slug: string;
-    }>;
-};
-
 export default async function CategoryPage({ params }: Props) {
-    const resolvedParams = await params; // paramsを解決
+    const resolvedParams = await params;
     const { slug } = resolvedParams;
 
     const { spots } = await getSpots({
@@ -28,3 +22,9 @@ export default async function CategoryPage({ params }: Props) {
         </div>
     );
 }
+
+type Props = {
+    params: Promise<{
+        slug: string;
+    }>;
+};

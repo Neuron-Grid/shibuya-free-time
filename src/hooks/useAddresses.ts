@@ -1,6 +1,6 @@
 // 住所取得ロジックの切り出し
 import { reverseGeocode } from "@/features/reverseGeocode";
-import type { Spot } from "@/types/newt/Spot";
+import type { Spot } from "@/types/newt/spot_type";
 
 const getAddresses = async (spots: Spot[]) => {
     const addressMap: Record<string, string> = {};

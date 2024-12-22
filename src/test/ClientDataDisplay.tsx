@@ -1,8 +1,8 @@
 "use client";
 import useAddresses from "@/hooks/useAddresses";
-import type { Category } from "@/types/newt/Category";
-import type { Spot } from "@/types/newt/Spot";
-import type { TagWithCount } from "@/types/newt/Tag";
+import type { Category } from "@/types/newt/Category_type";
+import type { TagWithCount } from "@/types/newt/Tag_type";
+import type { Spot } from "@/types/newt/spot_type";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 

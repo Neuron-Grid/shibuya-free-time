@@ -1,6 +1,6 @@
 import { SpotCard } from "@/components/partials/SpotCard";
 import { getSpots } from "@/libs/newt";
-import type { Spot } from "@/types/newt/Spot";
+import type { Spot } from "@/types/newt/spot_type";
 
 export default async function CategoryPage({ params }: Props) {
     const resolvedParams = await params;

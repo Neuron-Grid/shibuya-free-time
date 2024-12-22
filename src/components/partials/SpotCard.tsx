@@ -1,6 +1,6 @@
 import { formatDate } from "@/libs/date";
-import type { Spot } from "@/types/newt/Spot";
-import type { Tag } from "@/types/newt/Tag";
+import type { Tag } from "@/types/newt/Tag_type";
+import type { Spot } from "@/types/newt/spot_type";
 import Image from "next/image";
 import Link from "next/link";
 import { MdImageNotSupported } from "react-icons/md";

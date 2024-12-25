@@ -4,6 +4,7 @@ import type { Spot } from "@/types/newt/spot_type";
 import Image from "next/image";
 import Link from "next/link";
 import { MdImageNotSupported } from "react-icons/md";
+import type { JSX } from "react/jsx-runtime";
 
 const CoverImage = ({ src, alt }: { src: string; alt: string }) => {
     return (
@@ -40,6 +41,13 @@ export const SpotCard = ({ spot, href, resolvedAddress }: SpotCardProps) => {
     const { image, title, slug, tags, _sys } = spot;
     const formattedDate = formatDate(_sys.createdAt);
 
+    let imageElement: JSX.Element;
+    if (image) {
+        imageElement = <CoverImage src={image.src} alt={title} />;
+    } else {
+        imageElement = <NoCoverImage />;
+    }
+
     return (
         <div className="w-full">
             <Link
@@ -48,7 +56,7 @@ export const SpotCard = ({ spot, href, resolvedAddress }: SpotCardProps) => {
                 rel="me"
             >
                 <div className="flex flex-col sm:flex-row">
-                    {image ? <CoverImage src={image.src} alt={title} /> : <NoCoverImage />}
+                    {imageElement}
                     <div className="p-4 flex-1">
                         <h3 className="mb-2 line-clamp-2 text-2xl font-semibold text-light-text dark:text-dark-text group-hover:text-light-accent dark:group-hover:text-dark-accent">
                             {title}

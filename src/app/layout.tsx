@@ -7,17 +7,15 @@ import { Suspense } from "react";
 import "./globals.css";
 import type { Metadata } from "next";
 
-export async function layoutgenerateMetadata(): Promise<Metadata> {
-    return {
-        robots: {
-            index: true,
-            follow: true,
-            nocache: true,
-            nosnippet: true,
-            noarchive: true,
-        },
-    };
-}
+export const metadata: Metadata = {
+    robots: {
+        index: false,
+        follow: false,
+        nocache: false,
+        nosnippet: false,
+        noarchive: false,
+    },
+};
 
 export default function RootLayout({
     children,

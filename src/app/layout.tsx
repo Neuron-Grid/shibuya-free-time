@@ -8,6 +8,8 @@ import "./globals.css";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
+    title: "渋谷フリータイム",
+    description: "無料でこんなに楽しめる！渋谷の隠れた魅力を発見",
     robots: {
         index: false,
         follow: false,

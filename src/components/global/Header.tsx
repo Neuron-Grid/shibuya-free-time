@@ -1,5 +1,3 @@
-"use client";
-
 import ColorThemeSelector from "@/components/theme/ColorThemeSelector";
 import Link from "next/link";
 import { useState } from "react";

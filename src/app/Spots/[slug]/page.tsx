@@ -10,8 +10,23 @@ export const experimental_ppr = true;
 
 const Address = ({ address }: { address: string }) => {
     if (!address) return null;
+
+    const addressLines = address.split("\n").map((line, index) => ({
+        id: `line-${index}`,
+        content: line,
+    }));
+
     return (
-        <p className="text-base mb-4 text-grayscale-600 dark:text-grayscale-300">住所: {address}</p>
+        <div className="container">
+            <h3 className="text-lg font-semibold mb-2 text-grayscale-800 dark:text-grayscale-100">
+                住所
+            </h3>
+            {addressLines.map(({ id, content }) => (
+                <p key={id} className="text-base mb-2 text-grayscale-600 dark:text-grayscale-300">
+                    {content}
+                </p>
+            ))}
+        </div>
     );
 };
 
@@ -48,13 +63,15 @@ const SpotsPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
     }
 
     return (
-        <div className="container mx-auto p-4 bg-light-background dark:bg-dark-background min-h-screen">
-            {imageElement}
-            <h1 className="text-2xl font-semibold mb-4 text-light-text dark:text-dark-text">
-                {spot.title}
-            </h1>
-            <Address address={address} />
-            <SanitizedContent html={spot.Description} />
+        <div className="bg-light-background dark:bg-dark-background">
+            <div className="container">
+                {imageElement}
+                <h1 className="text-2xl font-semibold mb-4 text-light-text dark:text-dark-text">
+                    {spot.title}
+                </h1>
+                <Address address={address} />
+                <SanitizedContent html={spot.Description} />
+            </div>
         </div>
     );
 };

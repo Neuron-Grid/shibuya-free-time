@@ -1,11 +1,12 @@
+"use client";
 import ColorThemeSelector from "@/components/theme/ColorThemeSelector";
 import Link from "next/link";
 import { useState } from "react";
 import { RxCross2, RxHamburgerMenu } from "react-icons/rx";
 
 const navLinks: NavLink[] = [
-    { href: "/AlwaysFree", label: "常時無料" },
-    { href: "/LimitedFree", label: "期間限定無料" },
+    { href: "/public/AlwaysFree", label: "常時無料" },
+    { href: "/public/LimitedFree", label: "期間限定無料" },
 ];
 
 const Header: React.FC = () => {

@@ -7,8 +7,8 @@ const env_validation: EnvVariables = {
     newt_api_type: process.env.NEXT_NEWT_API_TYPE as "cdn" | "api",
     newt_app_uid: process.env.NEXT_NEWT_APP_UID as string,
     google_map_api: process.env.NEXT_GOOGLE_MAP_API as string,
-    supabase_url: process.env.NEXT_SUPABASE_URL as string,
-    supabase_key: process.env.NEXT_SUPABASE_KEY as string,
+    supabase_url: process.env.NEXT_PUBLIC_SUPABASE_URL as string,
+    supabase_key: process.env.NEXT_PUBLIC_SUPABASE_KEY as string,
 };
 
 const validateEnvVariables = (env: EnvVariables): void => {
@@ -16,7 +16,11 @@ const validateEnvVariables = (env: EnvVariables): void => {
         .filter(([, value]) => value === undefined || value === "")
         .map(([key]) => key);
     if (missingVars.length > 0) {
-        console.error(`Error: Missing or invalid environment variables: ${missingVars.join(", ")}`);
+        console.error(
+            `Error: Missing or invalid environment variables: ${
+                missingVars.join(", ")
+            }`,
+        );
         process.exit(1);
     }
 };

@@ -1,67 +1,56 @@
-import { supabaseClient } from "@/utils/supabaseClient";
-import { useRouter } from "next/navigation";
-import { type FormEvent, useCallback, useState } from "react";
+"use client";
 
-export const experimental_ppr = true;
+import { login } from "@/app/admin/login/actions";
 
 export default function LoginPage() {
-    const router = useRouter();
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-
-    const handleLogin = useCallback(
-        async (e: FormEvent<HTMLFormElement>) => {
-            e.preventDefault();
-            try {
-                const { error } = await supabaseClient.auth.signInWithPassword({
-                    email,
-                    password,
-                });
-                if (error) {
-                    alert("ログインに失敗しました");
-                    console.error(error);
-                } else {
-                    alert("ログイン成功！");
-                    // Next.js のルーターを使用してページ遷移
-                    router.push("/admin");
-                }
-            } catch (err) {
-                alert("ログインに失敗しました");
-                console.error(err);
-            }
-        },
-        [email, password, router],
-    );
-
     return (
-        <div className="container">
-            <div className="flex flex-col items-center justify-center min-h-screen p-4">
-                <h1 className="text-2xl font-bold mb-4">管理者ログイン</h1>
-                <form onSubmit={handleLogin} className="flex flex-col w-full max-w-sm gap-4">
+        <div className="container flex min-h-screen items-start justify-center bg-light-background text-light-text dark:bg-dark-background dark:text-dark-text p-4 sm:p-8">
+            <form
+                aria-label="Login Form"
+                className="relative w-full max-w-sm rounded-md p-6 shadow-md mt-10 sm:mt-16 md:mt-20 pb-20"
+            >
+                {/* Email */}
+                <div>
+                    <label className="mb-1 block font-semibold" htmlFor="email">
+                        Email
+                    </label>
                     <input
+                        id="email"
+                        name="email"
                         type="email"
-                        placeholder="Email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
                         required
-                        className="border border-gray-300 rounded p-2"
+                        aria-required="true"
+                        aria-label="Email address"
+                        className="w-full rounded-md border border-grayscale-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-light-accent dark:border-grayscale-700 dark:focus:ring-dark-accent"
                     />
+                </div>
+
+                {/* password */}
+                <div className="relative">
+                    <label className="mb-1 block font-semibold" htmlFor="password">
+                        Password
+                    </label>
                     <input
+                        id="password"
+                        name="password"
                         type="password"
-                        placeholder="Password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
                         required
-                        className="border border-gray-300 rounded p-2"
+                        aria-required="true"
+                        aria-label="Password"
+                        className="w-full rounded-md border border-grayscale-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-light-accent dark:border-grayscale-700 dark:focus:ring-dark-accent"
                     />
+                </div>
+
+                <div className="absolute bottom-4 right-4">
                     <button
                         type="submit"
-                        className="bg-blue-500 text-white rounded p-2 hover:bg-blue-600 transition-colors"
+                        formAction={login}
+                        className="rounded-md bg-light-accent px-4 py-2 font-semibold text-white transition-colors hover:bg-light-hover dark:bg-dark-accent dark:hover:bg-dark-hover"
                     >
-                        ログイン
+                        Login
                     </button>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
     );
 }

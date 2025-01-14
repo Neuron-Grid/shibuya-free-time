@@ -8,7 +8,7 @@ import type { JSX } from "react/jsx-runtime";
 
 const CoverImage = ({ src, alt }: { src: string; alt: string }) => {
     return (
-        <div className="relative h-48 w-full sm:h-auto sm:w-48 flex-shrink-0 overflow-hidden">
+        <div className="container relative h-48 w-full sm:h-auto sm:w-48 flex-shrink-0 overflow-hidden">
             <Image src={src} alt={alt} fill className="object-cover" loading="lazy" />
         </div>
     );
@@ -16,7 +16,7 @@ const CoverImage = ({ src, alt }: { src: string; alt: string }) => {
 
 const NoCoverImage = () => {
     return (
-        <div className="flex h-48 w-full sm:h-auto sm:w-48 flex-shrink-0 items-center justify-center bg-grayscale-100 dark:bg-grayscale-800 overflow-hidden">
+        <div className="container flex h-48 w-full sm:h-auto sm:w-48 flex-shrink-0 items-center justify-center bg-grayscale-100 dark:bg-grayscale-800 overflow-hidden">
             <MdImageNotSupported size={40} color="#CCCCCC" />
         </div>
     );
@@ -24,7 +24,7 @@ const NoCoverImage = () => {
 
 const Tags = ({ tags }: { tags: Tag[] }) => {
     return (
-        <ul className="mb-2 flex flex-wrap gap-1">
+        <ul className="container mb-2 flex flex-wrap gap-1">
             {tags.map((tag) => (
                 <li
                     key={tag._id}
@@ -49,9 +49,9 @@ export const SpotCard = ({ spot, href, resolvedAddress }: SpotCardProps) => {
     }
 
     return (
-        <div className="w-full">
+        <div className="w-full container">
             <Link
-                href={href || `/Spots/${slug}`}
+                href={href || `/public/Spots/${slug}`}
                 className="block overflow-hidden rounded-lg bg-light-background dark:bg-dark-background shadow-lg transition-transform hover:-translate-y-1 hover:shadow-xl no-underline"
                 rel="me"
             >

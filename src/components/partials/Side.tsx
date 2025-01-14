@@ -16,7 +16,7 @@ const Side: React.FC = async () => {
                         {tags.map((tag) => (
                             <li key={tag.slug}>
                                 <Link
-                                    href={`/tags/${tag.slug}`}
+                                    href={`/public/tags/${tag.slug}`}
                                     className="text-blue-500 hover:underline"
                                 >
                                     {tag.name}
@@ -33,7 +33,7 @@ const Side: React.FC = async () => {
                         {categories.map((category) => (
                             <li key={category.slug}>
                                 <Link
-                                    href={`/categories/${category.slug}`}
+                                    href={`/public/categories/${category.slug}`}
                                     className="text-blue-500 hover:underline"
                                 >
                                     {category.name}
@@ -47,7 +47,7 @@ const Side: React.FC = async () => {
                 <section>
                     <h2 className="text-xl font-bold mb-4">メールマガジン</h2>
                     <p>新着記事をメールでお届けします。</p>
-                    <Link href="/newsletter" className="text-blue-500 hover:underline">
+                    <Link href="/public/newsletter" className="text-blue-500 hover:underline">
                         メールマガジンに登録する
                     </Link>
                 </section>

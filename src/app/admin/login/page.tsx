@@ -7,7 +7,7 @@ export default function LoginPage() {
         <div className="container flex min-h-screen items-start justify-center bg-light-background text-light-text dark:bg-dark-background dark:text-dark-text p-4 sm:p-8">
             <form
                 aria-label="Login Form"
-                className="relative w-full max-w-sm rounded-md p-6 shadow-md mt-10 sm:mt-16 md:mt-20 pb-20"
+                className="relative w-full max-w-sm rounded-md p-6 mt-10 sm:mt-16 md:mt-20 pb-20"
             >
                 {/* Email */}
                 <div>

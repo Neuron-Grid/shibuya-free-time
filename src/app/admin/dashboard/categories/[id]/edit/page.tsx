@@ -8,6 +8,8 @@ import { useCallback, useEffect, useState } from "react";
 type Category = Database["public"]["Tables"]["categories"]["Row"];
 type CategoryUpdate = Database["public"]["Tables"]["categories"]["Update"];
 
+export const experimental_ppr = true;
+
 export default function EditCategoryPage() {
     const router = useRouter();
     const params = useParams();

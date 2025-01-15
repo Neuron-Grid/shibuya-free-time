@@ -1,5 +1,3 @@
-"use client";
-
 import Link from "next/link";
 import React from "react";
 
@@ -15,19 +13,28 @@ export default function AdminDashboardPage() {
     ];
 
     return (
-        <div className="p-4">
-            <h1 className="text-2xl font-bold mb-6">Admin Dashboard</h1>
+        <div className="container">
+            <div className="py-8 px-4 bg-light-background dark:bg-dark-background min-h-screen">
+                <h1 className="text-3xl font-bold mb-8 text-light-text dark:text-dark-text">
+                    Admin Dashboard
+                </h1>
 
-            {/* リソースの管理ページへのリンク一覧 */}
-            <ul className="space-y-2">
-                {adminLinks.map((link) => (
-                    <li key={link.href}>
-                        <Link href={link.href} className="text-blue-600 underline">
-                            {link.label}
+                {/* リソースの管理ページへのリンク一覧をカード風に表示 */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {adminLinks.map((link) => (
+                        <Link
+                            key={link.href}
+                            href={link.href}
+                            className="block p-6 rounded dark:bg-dark.hover dark:text-dark-text hover:shadow-lg transition-shadow dark:hover:bg-dark.hover"
+                        >
+                            <h2 className="text-xl font-semibold mb-2">{link.label}</h2>
+                            <p className="text-sm text-gray-500 dark:text-gray-400">
+                                Click to manage {link.label.toLowerCase().replace("manage ", "")}
+                            </p>
                         </Link>
-                    </li>
-                ))}
-            </ul>
+                    ))}
+                </div>
+            </div>
         </div>
     );
 }

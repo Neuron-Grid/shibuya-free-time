@@ -15,7 +15,7 @@ export default async function CategoryPage({ params }: Props) {
 
     return (
         <div className="container mx-auto p-4">
-            <h1 className="text-2xl">Category: {slug}</h1>
+            <h1 className="text-2xl">{slug}</h1>
             <div>
                 {spots.map((spot: Spot) => (
                     <SpotCard key={spot._id} spot={spot} />

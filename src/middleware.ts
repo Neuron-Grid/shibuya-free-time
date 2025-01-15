@@ -2,17 +2,13 @@ import { createServerSupabaseClient } from "@/utils/supabase/server";
 import { type NextRequest, NextResponse } from "next/server";
 
 // ミドルウェア適用除外パス
-const EXCLUDED_PATHS = [
-    "/admin/login",
-];
+const EXCLUDED_PATHS = ["/admin/login"];
 
 export async function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
 
     // 除外パスはスキップ
-    const isExcluded = EXCLUDED_PATHS.some((exclude) =>
-        pathname.startsWith(exclude)
-    );
+    const isExcluded = EXCLUDED_PATHS.some((exclude) => pathname.startsWith(exclude));
     if (isExcluded) {
         return NextResponse.next();
     }

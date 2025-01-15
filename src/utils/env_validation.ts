@@ -16,11 +16,7 @@ const validateEnvVariables = (env: EnvVariables): void => {
         .filter(([, value]) => value === undefined || value === "")
         .map(([key]) => key);
     if (missingVars.length > 0) {
-        console.error(
-            `Error: Missing or invalid environment variables: ${
-                missingVars.join(", ")
-            }`,
-        );
+        console.error(`Error: Missing or invalid environment variables: ${missingVars.join(", ")}`);
         process.exit(1);
     }
 };

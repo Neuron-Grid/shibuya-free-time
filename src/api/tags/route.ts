@@ -16,11 +16,7 @@ export async function POST(request: Request) {
         // 必要に応じてバリデーション
         const payload: TagInsert = body;
 
-        const { data, error } = await supabase
-            .from("tags")
-            .insert(payload)
-            .select("*")
-            .single();
+        const { data, error } = await supabase.from("tags").insert(payload).select("*").single();
 
         if (error) {
             return NextResponse.json({ error: error.message }, { status: 400 });
@@ -30,9 +26,7 @@ export async function POST(request: Request) {
         const createdTag = data as Tag;
         return NextResponse.json(createdTag, { status: 201 });
     } catch (error: unknown) {
-        const message = error instanceof Error
-            ? error.message
-            : "Unknown error";
+        const message = error instanceof Error ? error.message : "Unknown error";
         return NextResponse.json({ error: message }, { status: 500 });
     }
 }
@@ -50,9 +44,7 @@ export async function GET() {
         const tags = data as Tag[];
         return NextResponse.json(tags, { status: 200 });
     } catch (error: unknown) {
-        const message = error instanceof Error
-            ? error.message
-            : "Unknown error";
+        const message = error instanceof Error ? error.message : "Unknown error";
         return NextResponse.json({ error: message }, { status: 500 });
     }
 }
@@ -67,7 +59,9 @@ export async function PATCH(request: Request) {
         if (!id) {
             return NextResponse.json(
                 { error: "Missing 'id' for update." },
-                { status: 400 },
+                {
+                    status: 400,
+                },
             );
         }
 
@@ -85,9 +79,7 @@ export async function PATCH(request: Request) {
         const updatedTag = data as Tag;
         return NextResponse.json(updatedTag, { status: 200 });
     } catch (error: unknown) {
-        const message = error instanceof Error
-            ? error.message
-            : "Unknown error";
+        const message = error instanceof Error ? error.message : "Unknown error";
         return NextResponse.json({ error: message }, { status: 500 });
     }
 }
@@ -102,7 +94,9 @@ export async function DELETE(request: Request) {
         if (!id) {
             return NextResponse.json(
                 { error: "Missing 'id' for delete." },
-                { status: 400 },
+                {
+                    status: 400,
+                },
             );
         }
 
@@ -120,9 +114,7 @@ export async function DELETE(request: Request) {
         const deletedTag = data as Tag;
         return NextResponse.json(deletedTag, { status: 200 });
     } catch (error: unknown) {
-        const message = error instanceof Error
-            ? error.message
-            : "Unknown error";
+        const message = error instanceof Error ? error.message : "Unknown error";
         return NextResponse.json({ error: message }, { status: 500 });
     }
 }

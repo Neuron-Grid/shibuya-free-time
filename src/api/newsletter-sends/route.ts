@@ -3,10 +3,8 @@ import { createServerSupabaseClient } from "@/utils/supabase/server";
 import { NextResponse } from "next/server";
 
 type NewsletterSend = Database["public"]["Tables"]["newsletter_sends"]["Row"];
-type NewsletterSendInsert =
-    Database["public"]["Tables"]["newsletter_sends"]["Insert"];
-type NewsletterSendUpdate =
-    Database["public"]["Tables"]["newsletter_sends"]["Update"];
+type NewsletterSendInsert = Database["public"]["Tables"]["newsletter_sends"]["Insert"];
+type NewsletterSendUpdate = Database["public"]["Tables"]["newsletter_sends"]["Update"];
 
 // CREATE (POST)
 export async function POST(request: Request) {
@@ -27,9 +25,7 @@ export async function POST(request: Request) {
         const createdSend = data as NewsletterSend;
         return NextResponse.json(createdSend, { status: 201 });
     } catch (error: unknown) {
-        const message = error instanceof Error
-            ? error.message
-            : "Unknown error";
+        const message = error instanceof Error ? error.message : "Unknown error";
         return NextResponse.json({ error: message }, { status: 500 });
     }
 }
@@ -38,9 +34,7 @@ export async function POST(request: Request) {
 export async function GET() {
     try {
         const supabase = await createServerSupabaseClient();
-        const { data, error } = await supabase
-            .from("newsletter_sends")
-            .select("*");
+        const { data, error } = await supabase.from("newsletter_sends").select("*");
 
         if (error) {
             return NextResponse.json({ error: error.message }, { status: 400 });
@@ -48,9 +42,7 @@ export async function GET() {
 
         return NextResponse.json(data as NewsletterSend[], { status: 200 });
     } catch (error: unknown) {
-        const message = error instanceof Error
-            ? error.message
-            : "Unknown error";
+        const message = error instanceof Error ? error.message : "Unknown error";
         return NextResponse.json({ error: message }, { status: 500 });
     }
 }
@@ -59,16 +51,11 @@ export async function GET() {
 export async function PATCH(request: Request) {
     try {
         const supabase = await createServerSupabaseClient();
-        const body = (await request.json()) as
-            & { id?: string }
-            & NewsletterSendUpdate;
+        const body = (await request.json()) as { id?: string } & NewsletterSendUpdate;
 
         const { id, ...rest } = body;
         if (!id) {
-            return NextResponse.json(
-                { error: "Missing 'id' for update." },
-                { status: 400 },
-            );
+            return NextResponse.json({ error: "Missing 'id' for update." }, { status: 400 });
         }
 
         const { data, error } = await supabase
@@ -85,9 +72,7 @@ export async function PATCH(request: Request) {
         const updatedSend = data as NewsletterSend;
         return NextResponse.json(updatedSend, { status: 200 });
     } catch (error: unknown) {
-        const message = error instanceof Error
-            ? error.message
-            : "Unknown error";
+        const message = error instanceof Error ? error.message : "Unknown error";
         return NextResponse.json({ error: message }, { status: 500 });
     }
 }
@@ -100,10 +85,7 @@ export async function DELETE(request: Request) {
         const id = searchParams.get("id");
 
         if (!id) {
-            return NextResponse.json(
-                { error: "Missing 'id' for delete." },
-                { status: 400 },
-            );
+            return NextResponse.json({ error: "Missing 'id' for delete." }, { status: 400 });
         }
 
         const { data, error } = await supabase
@@ -120,9 +102,7 @@ export async function DELETE(request: Request) {
         const deletedSend = data as NewsletterSend;
         return NextResponse.json(deletedSend, { status: 200 });
     } catch (error: unknown) {
-        const message = error instanceof Error
-            ? error.message
-            : "Unknown error";
+        const message = error instanceof Error ? error.message : "Unknown error";
         return NextResponse.json({ error: message }, { status: 500 });
     }
 }

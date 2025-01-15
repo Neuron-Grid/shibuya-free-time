@@ -35,5 +35,5 @@ export async function signup(formData: FormData) {
     }
 
     revalidatePath("/", "layout");
-    redirect("/private");
+    redirect("/admin/dashboard");
 }

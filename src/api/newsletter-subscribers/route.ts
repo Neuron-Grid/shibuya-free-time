@@ -2,12 +2,9 @@ import type { Database } from "@/types/supabase/database.types";
 import { createServerSupabaseClient } from "@/utils/supabase/server";
 import { NextResponse } from "next/server";
 
-type NewsletterSubscriber =
-    Database["public"]["Tables"]["newsletter_subscribers"]["Row"];
-type NewsletterSubscriberInsert =
-    Database["public"]["Tables"]["newsletter_subscribers"]["Insert"];
-type NewsletterSubscriberUpdate =
-    Database["public"]["Tables"]["newsletter_subscribers"]["Update"];
+type NewsletterSubscriber = Database["public"]["Tables"]["newsletter_subscribers"]["Row"];
+type NewsletterSubscriberInsert = Database["public"]["Tables"]["newsletter_subscribers"]["Insert"];
+type NewsletterSubscriberUpdate = Database["public"]["Tables"]["newsletter_subscribers"]["Update"];
 
 // CREATE (POST)
 export async function POST(request: Request) {
@@ -28,9 +25,7 @@ export async function POST(request: Request) {
         const createdSubscriber = data as NewsletterSubscriber;
         return NextResponse.json(createdSubscriber, { status: 201 });
     } catch (error: unknown) {
-        const message = error instanceof Error
-            ? error.message
-            : "Unknown error";
+        const message = error instanceof Error ? error.message : "Unknown error";
         return NextResponse.json({ error: message }, { status: 500 });
     }
 }
@@ -39,9 +34,7 @@ export async function POST(request: Request) {
 export async function GET() {
     try {
         const supabase = await createServerSupabaseClient();
-        const { data, error } = await supabase
-            .from("newsletter_subscribers")
-            .select("*");
+        const { data, error } = await supabase.from("newsletter_subscribers").select("*");
 
         if (error) {
             return NextResponse.json({ error: error.message }, { status: 400 });
@@ -51,9 +44,7 @@ export async function GET() {
             status: 200,
         });
     } catch (error: unknown) {
-        const message = error instanceof Error
-            ? error.message
-            : "Unknown error";
+        const message = error instanceof Error ? error.message : "Unknown error";
         return NextResponse.json({ error: message }, { status: 500 });
     }
 }
@@ -62,16 +53,11 @@ export async function GET() {
 export async function PATCH(request: Request) {
     try {
         const supabase = await createServerSupabaseClient();
-        const body = (await request.json()) as
-            & { id?: string }
-            & NewsletterSubscriberUpdate;
+        const body = (await request.json()) as { id?: string } & NewsletterSubscriberUpdate;
 
         const { id, ...rest } = body;
         if (!id) {
-            return NextResponse.json(
-                { error: "Missing 'id' for update." },
-                { status: 400 },
-            );
+            return NextResponse.json({ error: "Missing 'id' for update." }, { status: 400 });
         }
 
         const { data, error } = await supabase
@@ -88,9 +74,7 @@ export async function PATCH(request: Request) {
         const updatedSubscriber = data as NewsletterSubscriber;
         return NextResponse.json(updatedSubscriber, { status: 200 });
     } catch (error: unknown) {
-        const message = error instanceof Error
-            ? error.message
-            : "Unknown error";
+        const message = error instanceof Error ? error.message : "Unknown error";
         return NextResponse.json({ error: message }, { status: 500 });
     }
 }
@@ -103,10 +87,7 @@ export async function DELETE(request: Request) {
         const id = searchParams.get("id");
 
         if (!id) {
-            return NextResponse.json(
-                { error: "Missing 'id' for delete." },
-                { status: 400 },
-            );
+            return NextResponse.json({ error: "Missing 'id' for delete." }, { status: 400 });
         }
 
         const { data, error } = await supabase
@@ -123,9 +104,7 @@ export async function DELETE(request: Request) {
         const deletedSubscriber = data as NewsletterSubscriber;
         return NextResponse.json(deletedSubscriber, { status: 200 });
     } catch (error: unknown) {
-        const message = error instanceof Error
-            ? error.message
-            : "Unknown error";
+        const message = error instanceof Error ? error.message : "Unknown error";
         return NextResponse.json({ error: message }, { status: 500 });
     }
 }

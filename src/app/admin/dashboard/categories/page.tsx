@@ -61,13 +61,15 @@ export default function CategoriesListPage() {
     }, [fetchCategories]);
 
     return (
-        <div className="container min-h-screen px-4 py-6 transition-colors duration-300 bg-light-background text-light-text dark:bg-dark-background dark:text-dark-text">
-            <h1 className="mb-6 text-2xl font-extrabold tracking-wide">Categories List</h1>
+        <div className="container mx-auto min-h-screen px-4 py-6 md:px-6 md:py-8 lg:px-8 lg:py-10 xl:px-10 xl:py-12 transition-colors duration-300 bg-light-background text-light-text dark:bg-dark-background dark:text-dark-text">
+            <h1 className="mb-6 text-2xl font-extrabold tracking-wide md:text-3xl lg:text-4xl">
+                Categories List
+            </h1>
 
             {/* 新規作成画面へ */}
             <Link
                 href="/admin/dashboard/categories/create"
-                className="inline-block rounded bg-light-accent px-4 py-2 text-white transition-colors duration-300 hover:bg-light-hover dark:bg-dark-accent dark:hover:bg-dark-hover mb-6"
+                className="inline-block mb-6 rounded bg-light-accent px-4 py-2 text-sm font-medium text-grayscale-100 transition-colors duration-300 hover:bg-light-hover dark:bg-dark-accent dark:hover:bg-dark-hover md:text-base lg:text-lg"
             >
                 新規作成
             </Link>
@@ -86,7 +88,7 @@ export default function CategoriesListPage() {
             )}
 
             <div className="overflow-x-auto">
-                <table className="w-full min-w-[600px] border-collapse overflow-hidden rounded-lg bg-white text-left shadow-sm dark:bg-grayscale-950">
+                <table className="w-full sm:min-w-[600px] border-collapse overflow-hidden rounded-lg text-grayscale-100 text-left shadow-sm dark:bg-grayscale-950">
                     <thead>
                         <tr className="border-b border-grayscale-300 dark:border-grayscale-700">
                             <th className="p-3 font-semibold">ID</th>

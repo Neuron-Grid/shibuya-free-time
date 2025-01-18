@@ -1,19 +1,7 @@
-import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
 import type React from "react";
-import "./globals.css";
-
-export const metadata: Metadata = {
-    title: "渋谷フリータイム",
-    description: "無料でこんなに楽しめる！渋谷の隠れた魅力を発見",
-    robots: {
-        index: false,
-        follow: false,
-        nocache: false,
-        nosnippet: false,
-        noarchive: false,
-    },
-};
+import "../globals.css";
+import AdminHeader from "@/components/admin/admin_header";
 
 export default function RootLayout({
     children,
@@ -24,6 +12,7 @@ export default function RootLayout({
         <html lang="ja" suppressHydrationWarning>
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
                 <body>
+                    <AdminHeader />
                     <main>{children}</main>
                 </body>
             </ThemeProvider>

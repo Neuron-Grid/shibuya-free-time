@@ -2,21 +2,11 @@ import Link from "next/link";
 import React from "react";
 
 export default function AdminDashboardPage() {
-    // リソース管理ページへのリンクを配列で管理
-    const adminLinks: AdminLink[] = [
-        { href: "/admin/dashboard/categories", label: "Manage Categories" },
-        { href: "/admin/dashboard/tags", label: "Manage Tags" },
-        { href: "/admin/dashboard/newsletter-issues", label: "Manage Newsletter Issues" },
-        { href: "/admin/dashboard/newsletter-sends", label: "Manage Newsletter Sends" },
-        { href: "/admin/dashboard/newsletter-subscribers", label: "Manage Newsletter Subscribers" },
-        { href: "/admin/dashboard/temporary-spots", label: "Manage Temporary Spots" },
-    ];
-
     return (
         <div className="container">
-            <div className="py-8 px-4 bg-light-background dark:bg-dark-background min-h-screen">
+            <div className="py-8 px-4min-h-screen">
                 <h1 className="text-3xl font-bold mb-8 text-light-text dark:text-dark-text">
-                    Admin Dashboard
+                    管理者用ダッシュボード
                 </h1>
 
                 {/* リソースの管理ページへのリンク一覧をカード風に表示 */}
@@ -39,7 +29,19 @@ export default function AdminDashboardPage() {
     );
 }
 
-// リンク先と表示文字列をまとめた型を用意
+// リソース管理ページへのリンクを配列で管理
+const adminLinks: AdminLink[] = [
+    { href: "/admin/dashboard/categories", label: "カテゴリーの管理" },
+    { href: "/admin/dashboard/tags", label: "タグの管理" },
+    { href: "/admin/dashboard/newsletter-issues", label: "ニュースレターの課題を課題" },
+    { href: "/admin/dashboard/newsletter-sends", label: "ニュースレターの送信を管理" },
+    {
+        href: "/admin/dashboard/newsletter-subscribers",
+        label: "ニュースレターのサブスクを管理",
+    },
+    { href: "/admin/dashboard/temporary-spots", label: "期間限定の記事管理" },
+];
+
 type AdminLink = {
     href: string;
     label: string;

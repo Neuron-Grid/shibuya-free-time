@@ -14,16 +14,12 @@ export default function CreateCategoryPage() {
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
 
-    // 新規作成
     const handleCreate = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setLoading(true);
         setError(null);
         try {
-            const payload: CategoryInsert = {
-                name,
-                slug,
-            };
+            const payload: CategoryInsert = { name, slug };
             const res = await fetch("/api/categories", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -43,15 +39,13 @@ export default function CreateCategoryPage() {
     };
 
     return (
-        // 画面全体の背景をライト/ダークで切り替え
-        <div className="min-h-screen bg-light-background dark:bg-dark-background flex items-center justify-center p-4">
-            {/* コンテンツを中央に寄せるためのコンテナ */}
-            <div className="w-full max-w-md dark:bg-grayscale-900 rounded-md shadow-md p-6">
+        <div className="min-h-screen bg-light-background dark:bg-dark-background flex flex-col items-start justify-start pt-10 pb-20 px-4">
+            <div className="w-full max-w-md md:max-w-2xl lg:max-w-3xl mx-auto dark:bg-grayscale-900 p-6 lg:p-8">
                 <h1 className="text-2xl font-bold mb-6 text-light-text dark:text-dark-text">
                     カテゴリー新規作成
                 </h1>
 
-                {error && <p className="text-error mb-4 text-sm font-semibold">{error}</p>}
+                <p className="text-error mb-4 text-sm font-semibold">{error}</p>
 
                 <form onSubmit={handleCreate} className="space-y-5">
                     <div>
@@ -64,7 +58,7 @@ export default function CreateCategoryPage() {
                         <input
                             id="name"
                             type="text"
-                            className="block w-full rounded border border-grayscale-300 dark:border-grayscale-700 bg-light-background dark:bg-dark-background  text-light-text dark:text-dark-text p-2 focus:outline-none focus:ring-2 focus:ring-light-accent dark:focus:ring-dark-accent"
+                            className="block w-full rounded border border-grayscale-300 dark:border-grayscale-700 bg-light-background dark:bg-dark-background text-light-text dark:text-dark-text p-2 focus:outline-none focus:ring-2 focus:ring-light-accent dark:focus:ring-dark-accent"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             placeholder="例) カフェ"
@@ -82,7 +76,7 @@ export default function CreateCategoryPage() {
                         <input
                             id="slug"
                             type="text"
-                            className="block w-full rounded border border-grayscale-300 dark:border-grayscale-700 bg-light-background dark:bg-dark-background text-light-text dark:text-dark-text p-2  focus:outline-none focus:ring-2 focus:ring-light-accent dark:focus:ring-dark-accent"
+                            className="block w-full rounded border border-grayscale-300 dark:border-grayscale-700 bg-light-background dark:bg-dark-background text-light-text dark:text-dark-text p-2 focus:outline-none focus:ring-2 focus:ring-light-accent dark:focus:ring-dark-accent"
                             value={slug}
                             onChange={(e) => setSlug(e.target.value)}
                             placeholder="例) cafe"

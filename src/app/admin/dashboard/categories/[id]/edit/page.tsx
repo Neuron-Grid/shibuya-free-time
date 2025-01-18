@@ -81,26 +81,21 @@ export default function EditCategoryPage() {
     }, [categoryId, fetchCategory]);
 
     return (
-        // 画面全体をライトモード/ダークモードの背景に
-        <div className="min-h-screen bg-light-background dark:bg-dark-background px-4 py-8 text-light-text dark:text-dark-text">
-            <div className="max-w-2xl mx-auto bg-white dark:bg-grayscale-900 rounded shadow p-6">
+        <div className="min-h-screen bg-light-background dark:bg-dark-background px-4 md:px-8 py-4 md:py-8 text-light-text dark:text-dark-text">
+            <div className="max-w-4xl mx-auto bg-grayscale-50 dark:bg-grayscale-900 p-4 md:p-8">
                 <h1 className="text-2xl font-bold mb-6">カテゴリー編集</h1>
-
-                {/* エラー表示 */}
                 {error && <p className="text-error font-semibold mb-4">{error}</p>}
-
-                {/* ロード中に名前がまだセットされていない場合のみ表示 */}
                 {loading && !name && <p>Loading...</p>}
 
                 <form onSubmit={handleUpdate} className="space-y-6">
                     <div>
-                        <label htmlFor="name" className="block font-medium mb-1">
+                        <label htmlFor="name" className="block font-medium mb-2">
                             Name
                         </label>
                         <input
                             id="name"
                             type="text"
-                            className="w-full rounded border border-grayscale-300 dark:border-grayscale-600 p-2 bg-light-background dark:bg-dark-background text-light-text dark:text-dark-text focus:outline-none focus:ring focus:ring-light-accent dark:focus:ring-dark-accent"
+                            className="w-full rounded border border-grayscale-300 dark:border-grayscale-600 p-2 md:p-3 bg-light-background dark:bg-dark-background text-light-text dark:text-dark-text focus:outline-none focus:ring focus:ring-light-accent dark:focus:ring-dark-accent transition"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             required
@@ -108,25 +103,22 @@ export default function EditCategoryPage() {
                     </div>
 
                     <div>
-                        <label htmlFor="slug" className="block font-medium mb-1">
+                        <label htmlFor="slug" className="block font-medium mb-2">
                             Slug
                         </label>
                         <input
                             id="slug"
                             type="text"
-                            className="w-full rounded border border-grayscale-300 dark:border-grayscale-600 p-2 bg-light-background dark:bg-dark-background text-light-text dark:text-dark-text focus:outline-none focus:ring focus:ring-light-accent dark:focus:ring-dark-accent"
+                            className="w-full rounded border border-grayscale-300 dark:border-grayscale-600 p-2 md:p-3 bg-light-background dark:bg-dark-background text-light-text dark:text-dark-text focus:outline-none focus:ring focus:ring-light-accent dark:focus:ring-dark-accent transition"
                             value={slug}
                             onChange={(e) => setSlug(e.target.value)}
                             required
                         />
                     </div>
-
                     <button
                         type="submit"
                         disabled={loading}
-                        className={
-                            "rounded px-4 py-2 font-semibold bg-light-accent hover:bg-light-hover dark:bg-dark-accent dark:hover:bg-dark-hover  text-white disabled:opacity-50 transition-colors"
-                        }
+                        className="rounded px-4 py-2 font-semibold bg-light-accent hover:bg-light-hover dark:bg-dark-accent dark:hover:bg-dark-hover text-grayscale-50 disabled:opacity-50 transition-colors"
                     >
                         {loading ? "更新中..." : "更新"}
                     </button>

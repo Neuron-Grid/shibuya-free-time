@@ -9,7 +9,7 @@ const navLinks: NavLink[] = [
     { href: "/public/LimitedFree", label: "期間限定無料" },
 ];
 
-const Header: React.FC = () => {
+const public_Header: React.FC = () => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const toggleMenu = () => setIsOpen((prev) => !prev);
     const closeMenu = () => setIsOpen(false);
@@ -92,7 +92,7 @@ const Header: React.FC = () => {
     );
 };
 
-export default Header;
+export default public_Header;
 
 interface NavLink {
     href: string;

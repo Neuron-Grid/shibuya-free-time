@@ -13,14 +13,13 @@ const env_validation: EnvVariables = {
 
 const validateEnvVariables = (env: EnvVariables): void => {
     const missingVars = Object.entries(env)
-        .filter(([, value]) => value === undefined || value === "")
+        .filter(([, value]) => !value)
         .map(([key]) => key);
     if (missingVars.length > 0) {
-        console.error(`Error: Missing or invalid environment variables: ${missingVars.join(", ")}`);
-        process.exit(1);
+        console.error(`Missing environment variables: ${missingVars.join(", ")}`);
+        throw new Error("Environment variables validation failed");
     }
 };
-
 // 環境変数のバリデーションを実行
 validateEnvVariables(env_validation);
 

@@ -60,7 +60,12 @@ export async function PATCH(request: Request) {
 
         const { id, ...rest } = body;
         if (!id) {
-            return NextResponse.json({ error: "Missing 'id' for update." }, { status: 400 });
+            return NextResponse.json(
+                { error: "Missing 'id' for update." },
+                {
+                    status: 400,
+                },
+            );
         }
 
         const { data, error } = await supabase
@@ -90,7 +95,12 @@ export async function DELETE(request: Request) {
         const id = searchParams.get("id");
 
         if (!id) {
-            return NextResponse.json({ error: "Missing 'id' for delete." }, { status: 400 });
+            return NextResponse.json(
+                { error: "Missing 'id' for delete." },
+                {
+                    status: 400,
+                },
+            );
         }
 
         const { data, error } = await supabase

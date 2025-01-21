@@ -6,6 +6,7 @@ import { useCallback, useEffect, useState } from "react";
 
 type TemporarySpot = Database["public"]["Tables"]["temporary_spots"]["Row"];
 type TemporarySpotUpdate = Database["public"]["Tables"]["temporary_spots"]["Update"];
+type SpotStatus = Database["public"]["Enums"]["spot_status"];
 
 export const experimental_ppr = true;
 
@@ -22,7 +23,9 @@ export default function EditTemporarySpotPage() {
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
     const [description, setDescription] = useState("");
+    const [status, setStatus] = useState<SpotStatus>("draft");
 
+    // 既存データ取得
     const fetchSpot = useCallback(async () => {
         try {
             setLoading(true);
@@ -39,6 +42,7 @@ export default function EditTemporarySpotPage() {
                 setStartDate(found.start_date);
                 setEndDate(found.end_date);
                 setDescription(found.description);
+                setStatus(found.status);
             } else {
                 setError("期間限定の記事が見つかりません。");
             }
@@ -49,10 +53,12 @@ export default function EditTemporarySpotPage() {
         }
     }, [spotId]);
 
+    // 更新処理
     const handleUpdate = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setLoading(true);
         setError(null);
+
         try {
             const payload: TemporarySpotUpdate & { id: string } = {
                 id: spotId,
@@ -61,7 +67,9 @@ export default function EditTemporarySpotPage() {
                 start_date: startDate,
                 end_date: endDate,
                 description,
+                status,
             };
+
             const res = await fetch("/api/temporary-spots", {
                 method: "PATCH",
                 headers: { "Content-Type": "application/json" },
@@ -161,6 +169,22 @@ export default function EditTemporarySpotPage() {
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
                         />
+                    </div>
+
+                    <div>
+                        <label htmlFor="status" className="block font-medium mb-1">
+                            ステータス
+                        </label>
+                        <select
+                            id="status"
+                            className="w-full rounded border border-grayscale-300 dark:border-grayscale-600 p-2 bg-light-background dark:bg-dark-background text-light-text dark:text-dark-text focus:outline-none focus:ring focus:ring-light-accent dark:focus:ring-dark-accent"
+                            value={status}
+                            onChange={(e) => setStatus(e.target.value as SpotStatus)}
+                        >
+                            <option value="draft">Draft</option>
+                            <option value="published">Published</option>
+                            <option value="deleted">Deleted</option>
+                        </select>
                     </div>
 
                     <button

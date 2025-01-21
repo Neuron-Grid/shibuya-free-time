@@ -1,5 +1,6 @@
 "use client";
 
+import { formatDate } from "@/libs/date";
 import type { Database } from "@/types/supabase/database.types";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -62,7 +63,7 @@ export default function TemporarySpotsListPage() {
 
     return (
         <div className="container min-h-screen px-4 py-6 transition-colors duration-300 bg-light-background text-light-text dark:bg-dark-background dark:text-dark-text">
-            <h1 className="mb-6 text-2xl font-extrabold tracking-wide">TemporarySpots List</h1>
+            <h1 className="mb-6 text-2xl font-extrabold tracking-wide">期間限定の記事</h1>
 
             {/* 新規作成画面へ */}
             <Link
@@ -86,7 +87,7 @@ export default function TemporarySpotsListPage() {
             )}
 
             <div className="overflow-x-auto">
-                <table className="w-full min-w-[600px] border-collapse overflow-hidden rounded-lg bg-white text-left shadow-sm dark:bg-grayscale-950">
+                <table className="w-full min-w-[700px] border-collapse overflow-hidden rounded-lg bg-white text-left shadow-sm dark:bg-grayscale-950">
                     <thead>
                         <tr className="border-b border-grayscale-300 dark:border-grayscale-700">
                             <th className="p-3 font-semibold">ID</th>
@@ -94,6 +95,7 @@ export default function TemporarySpotsListPage() {
                             <th className="p-3 font-semibold">Slug</th>
                             <th className="p-3 font-semibold">開始日</th>
                             <th className="p-3 font-semibold">終了日</th>
+                            <th className="p-3 font-semibold">ステータス</th>
                             <th className="p-3 font-semibold">Actions</th>
                         </tr>
                     </thead>
@@ -106,8 +108,13 @@ export default function TemporarySpotsListPage() {
                                 <td className="p-3">{spot.id}</td>
                                 <td className="p-3">{spot.title}</td>
                                 <td className="p-3">{spot.slug}</td>
-                                <td className="p-3">{spot.start_date}</td>
-                                <td className="p-3">{spot.end_date}</td>
+                                <td className="p-3">
+                                    {spot.start_date ? formatDate(spot.start_date) : ""}
+                                </td>
+                                <td className="p-3">
+                                    {spot.end_date ? formatDate(spot.end_date) : ""}
+                                </td>
+                                <td className="p-3">{spot.status}</td>
                                 <td className="p-3">
                                     <div className="flex items-center space-x-4">
                                         <Link

@@ -48,7 +48,7 @@ export default function LoginPage() {
                             <button
                                 type="submit"
                                 formAction={login}
-                                className="rounded-md bg-light-accent px-4 py-2 font-semibold border-grayscale-100 transition-colors hover:bg-light-hover dark:bg-dark-accent dark:hover:bg-dark-hover"
+                                className="text-light-text dark:text-dark-text bg-light-accent hover:bg-light-hover dark:bg-dark-accent dark:hover:bg-dark-hover rounded-md px-4 py-2 font-semibold transition-colors"
                             >
                                 Login
                             </button>

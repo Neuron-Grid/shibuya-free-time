@@ -1,4 +1,4 @@
-import { SpotCard } from "@/components/partials/SpotCard";
+import { SpotCard } from "@/components/partials/newt/SpotCard";
 import { getSpots, getTagslug } from "@/libs/newt";
 
 export const experimental_ppr = true;

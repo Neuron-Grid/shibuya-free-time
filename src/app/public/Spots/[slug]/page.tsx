@@ -16,7 +16,7 @@ const Address = ({ address }: { address: string }) => {
         content: line,
     }));
 
-    {/* 住所部分をカードっぽく表示する例 */}
+    {/* 住所部分をカードっぽく表示する */}
     return (
         <div className="container">
             <div className="dark:bg-grayscale-900 p-4 mb-4">

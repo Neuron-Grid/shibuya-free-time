@@ -40,6 +40,7 @@ const adminLinks: AdminLink[] = [
         label: "ニュースレターのサブスクを管理",
     },
     { href: "/admin/dashboard/temporary-spots", label: "期間限定の記事管理" },
+    { href: "/admin/dashboard/photo", label: "写真の管理" },
 ];
 
 type AdminLink = {

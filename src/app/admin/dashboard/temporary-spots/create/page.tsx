@@ -2,69 +2,64 @@
 
 import type { Database } from "@/types/supabase/database.types";
 import { useRouter } from "next/navigation";
-import { type FormEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
-// "temporary_spots"テーブルの挿入型
+// temporary_spotsテーブルのInsert用型
 type TemporarySpotInsert = Database["public"]["Tables"]["temporary_spots"]["Insert"];
-// ENUM spot_status
 type SpotStatus = Database["public"]["Enums"]["spot_status"];
-// "categories"テーブルのRow型
-type Category = Database["public"]["Tables"]["categories"]["Row"];
+
+// photoテーブルのRow型
+type Photo = Database["public"]["Tables"]["photo"]["Row"];
 
 export default function CreateTemporarySpotPage() {
     const router = useRouter();
 
-    // 入力フォームのステート
+    // [1] temporary_spots入力フォーム用ステート
     const [title, setTitle] = useState("");
     const [slug, setSlug] = useState("");
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
     const [description, setDescription] = useState("");
     const [status, setStatus] = useState<SpotStatus>("draft");
-    // カテゴリ選択用のステート
-    const [categoryId, setCategoryId] = useState<string>("");
-    // カテゴリ一覧を保存するステート
-    const [categories, setCategories] = useState<Category[]>([]);
-    // エラー・ローディング
+
+    // [2] 既存の写真一覧 + 選択中の写真ID
+    const [photos, setPhotos] = useState<Photo[]>([]);
+    const [selectedPhotoId, setSelectedPhotoId] = useState<string>("");
+
+    // [3] ローディング・エラー表示
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
 
-    // 初回マウント時に /api/categories から一覧を取得
+    // 写真一覧を取得
     useEffect(() => {
-        const fetchCategories = async () => {
+        const fetchPhotos = async () => {
             try {
                 setLoading(true);
-                const res = await fetch("/api/categories", { method: "GET" });
+                const res = await fetch("/api/photo", { method: "GET" });
                 if (!res.ok) {
                     const data = await res.json();
-                    throw new Error(data.error || "カテゴリ一覧の取得に失敗しました。");
+                    throw new Error(data.error || "Failed to fetch photos");
                 }
-                const data: Category[] = await res.json();
-                setCategories(data);
+                const data: Photo[] = await res.json();
+                setPhotos(data);
             } catch (err: unknown) {
                 setError(err instanceof Error ? err.message : "Unknown error");
             } finally {
                 setLoading(false);
             }
         };
-
-        fetchCategories();
+        fetchPhotos();
     }, []);
 
-    // 新規作成処理
-    const handleCreate = async (e: FormEvent<HTMLFormElement>) => {
+    // 新規作成 + 写真紐付け
+    const handleCreate = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setLoading(true);
         setError(null);
 
         try {
-            // カテゴリが未選択の場合のバリデーション例
-            if (!categoryId) {
-                throw new Error("カテゴリが選択されていません。");
-            }
-
-            // Supabaseに送るpayload
-            const payload: TemporarySpotInsert = {
+            // 1. temporary_spotsの新規作成
+            const spotPayload: TemporarySpotInsert = {
                 title,
                 slug,
                 start_date: startDate,
@@ -72,22 +67,42 @@ export default function CreateTemporarySpotPage() {
                 description,
                 address_lat: 0,
                 address_lng: 0,
-                category_id: categoryId, // ユーザーが選択したカテゴリID
                 status,
+                category_id: "",
             };
 
-            const res = await fetch("/api/temporary-spots", {
+            const resSpot = await fetch("/api/temporary-spots", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload),
+                body: JSON.stringify(spotPayload),
             });
+            if (!resSpot.ok) {
+                const data = await resSpot.json();
+                throw new Error(data.error || "スポットの作成に失敗しました。");
+            }
+            const createdSpot = (await resSpot.json()) as {
+                id: string;
+                title: string;
+            };
 
-            if (!res.ok) {
-                const data = await res.json();
-                throw new Error(data.error || "新規作成に失敗しました。");
+            // 2. 写真を紐付け (selectedPhotoId が選択されている場合)
+            if (selectedPhotoId) {
+                const patchRes = await fetch("/api/photo", {
+                    method: "PATCH",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        id: selectedPhotoId,
+                        temporary_spot_id: createdSpot.id,
+                    }),
+                });
+                if (!patchRes.ok) {
+                    const patchErrData = await patchRes.json();
+                    throw new Error(patchErrData.error || "写真の紐付けに失敗しました。");
+                }
             }
 
-            // 成功時、一覧画面に遷移
+            // 3. 成功したら一覧へ遷移
+            alert("新規記事を作成し、写真を紐付けました。");
             router.push("/admin/dashboard/temporary-spots");
         } catch (err: unknown) {
             setError(err instanceof Error ? err.message : "Unknown error");
@@ -97,149 +112,118 @@ export default function CreateTemporarySpotPage() {
     };
 
     return (
-        <div className="container min-h-screen px-4 sm:px-6 md:px-8 pt-0 flex items-start justify-center">
-            <div className="w-full sm:max-w-md md:max-w-lg lg:max-w-3xl xl:max-w-4xl p-6 bg-light-background dark:bg-dark-background rounded-md shadow-md">
-                <h1 className="text-2xl font-bold mb-6 text-light-text dark:text-dark-text">
-                    期間限定の記事新規作成
-                </h1>
+        <div className="container">
+            <div className="min-h-screen flex flex-col items-start pt-4 lg:pt-8 px-4 md:px-8 lg:px-16">
+                <h1 className="text-xl font-bold mb-4">期間限定の記事新規作成</h1>
 
-                {/* エラーメッセージ */}
-                {error && <p className="text-error mb-4 text-sm font-semibold">{error}</p>}
+                {error && <p className="text-red-500 mb-4">{error}</p>}
+                {loading && <p className="mb-4">処理中...</p>}
 
-                {/* ローディング表示 */}
-                {loading && <p className="mb-4 text-gray-700 dark:text-gray-300">読み込み中...</p>}
-
-                <form onSubmit={handleCreate} className="space-y-5 md:space-y-6">
-                    {/* 記事のタイトル */}
+                <form onSubmit={handleCreate} className="space-y-4 w-full">
+                    {/* タイトル */}
                     <div>
-                        <label
-                            htmlFor="title"
-                            className="block mb-2 font-medium text-light-text dark:text-dark-text"
-                        >
+                        <label htmlFor="title" className="block mb-1 font-medium">
                             記事のタイトル
                         </label>
                         <input
                             id="title"
                             type="text"
-                            className="block w-full rounded border border-grayscale-300 dark:border-grayscale-700 p-2 focus:outline-none focus:ring-2 focus:ring-light-accent dark:focus:ring-dark-accent bg-light-background dark:bg-dark-background text-light-text dark:text-dark-text"
+                            className="border rounded p-2 w-full"
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
-                            placeholder="例) 期間限定カフェ"
                             required
                         />
                     </div>
 
-                    {/* Slug */}
+                    {/* slug */}
                     <div>
-                        <label
-                            htmlFor="slug"
-                            className="block mb-2 font-medium text-light-text dark:text-dark-text"
-                        >
+                        <label htmlFor="slug" className="block mb-1 font-medium">
                             Slug
                         </label>
                         <input
                             id="slug"
                             type="text"
-                            className="block w-full rounded border border-grayscale-300 dark:border-grayscale-700 p-2 focus:outline-none focus:ring-2 focus:ring-light-accent dark:focus:ring-dark-accent bg-light-background dark:bg-dark-background text-light-text dark:text-dark-text"
+                            className="border rounded p-2 w-full"
                             value={slug}
                             onChange={(e) => setSlug(e.target.value)}
-                            placeholder="例) limited-cafe"
-                            required
                         />
                     </div>
 
-                    {/* 開始日 */}
+                    {/* startDate */}
                     <div>
-                        <label
-                            htmlFor="startDate"
-                            className="block mb-2 font-medium text-light-text dark:text-dark-text"
-                        >
+                        <label htmlFor="startDate" className="block mb-1 font-medium">
                             開始日
                         </label>
                         <input
                             id="startDate"
                             type="date"
-                            className="block w-full rounded border border-grayscale-300 dark:border-grayscale-700 p-2 focus:outline-none focus:ring-2 focus:ring-light-accent dark:focus:ring-dark-accent bg-light-background dark:bg-dark-background text-light-text dark:text-dark-text"
+                            className="border rounded p-2 w-full"
                             value={startDate}
                             onChange={(e) => setStartDate(e.target.value)}
-                            required
                         />
                     </div>
 
-                    {/* 終了日 */}
+                    {/* endDate */}
                     <div>
-                        <label
-                            htmlFor="endDate"
-                            className="block mb-2 font-medium text-light-text dark:text-dark-text"
-                        >
+                        <label htmlFor="endDate" className="block mb-1 font-medium">
                             終了日
                         </label>
                         <input
                             id="endDate"
                             type="date"
-                            className="block w-full rounded border border-grayscale-300 dark:border-grayscale-700 p-2 focus:outline-none focus:ring-2 focus:ring-light-accent dark:focus:ring-dark-accent bg-light-background dark:bg-dark-background text-light-text dark:text-dark-text"
+                            className="border rounded p-2 w-full"
                             value={endDate}
                             onChange={(e) => setEndDate(e.target.value)}
-                            required
                         />
                     </div>
 
-                    {/* 記事の内容 */}
+                    {/* description */}
                     <div>
-                        <label
-                            htmlFor="description"
-                            className="block mb-2 font-medium text-light-text dark:text-dark-text"
-                        >
+                        <label htmlFor="description" className="block mb-1 font-medium">
                             記事の内容
                         </label>
                         <textarea
                             id="description"
-                            rows={5}
-                            className="block w-full rounded border border-grayscale-300 dark:border-grayscale-700 p-2 focus:outline-none focus:ring-2 focus:ring-light-accent dark:focus:ring-dark-accent bg-light-background dark:bg-dark-background text-light-text dark:text-dark-text h-32 md:h-40 lg:h-80 xl:h-96"
+                            className="border rounded p-2 w-full h-40 md:h-60 lg:h-80"
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
-                            placeholder="説明を入力してください"
                         />
                     </div>
 
-                    {/* ステータス */}
+                    {/* status */}
                     <div>
-                        <label
-                            htmlFor="status"
-                            className="block mb-2 font-medium text-light-text dark:text-dark-text"
-                        >
+                        <label htmlFor="status" className="block mb-1 font-medium">
                             ステータス
                         </label>
                         <select
                             id="status"
-                            className="block w-full rounded border border-grayscale-300 dark:border-grayscale-700 p-2 focus:outline-none focus:ring-2 focus:ring-light-accent dark:focus:ring-dark-accent bg-light-background dark:bg-dark-background text-light-text dark:text-dark-text"
+                            className="border rounded p-2 w-full"
                             value={status}
                             onChange={(e) => setStatus(e.target.value as SpotStatus)}
                         >
-                            <option value="draft">下書き</option>
-                            <option value="published">公開</option>
+                            <option value="draft">Draft</option>
+                            <option value="published">Published</option>
+                            <option value="deleted">Deleted</option>
                         </select>
                     </div>
 
-                    {/* カテゴリ選択 */}
+                    <hr className="my-2 w-full" />
+
+                    {/* 既存の写真を選択 */}
                     <div>
-                        <label
-                            htmlFor="category"
-                            className="block mb-2 font-medium text-light-text dark:text-dark-text"
-                        >
-                            カテゴリ
+                        <label htmlFor="photoSelect" className="block mb-1 font-medium">
+                            既存の写真を紐づける (任意)
                         </label>
                         <select
-                            id="category"
-                            className="block w-full rounded border border-grayscale-300 dark:border-grayscale-700 p-2 focus:outline-none focus:ring-2 focus:ring-light-accent dark:focus:ring-dark-accent bg-light-background dark:bg-dark-background text-light-text dark:text-dark-text"
-                            value={categoryId}
-                            onChange={(e) => setCategoryId(e.target.value)}
-                            required
+                            id="photoSelect"
+                            className="border rounded p-2 w-full"
+                            value={selectedPhotoId}
+                            onChange={(e) => setSelectedPhotoId(e.target.value)}
                         >
-                            <option value="">-- 選択してください --</option>
-                            {categories.map((cat) => (
-                                <option key={cat.id} value={cat.id}>
-                                    {cat.name}
+                            <option value="">-- 写真を選択 --</option>
+                            {photos.map((photo) => (
+                                <option key={photo.id} value={photo.id}>
+                                    {photo.file_path ?? photo.id}
                                 </option>
                             ))}
                         </select>
@@ -249,9 +233,9 @@ export default function CreateTemporarySpotPage() {
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full flex items-center justify-center rounded bg-light-accent dark:bg-dark-accent text-grayscale-50 px-4 py-2 hover:bg-light-hover dark:hover:bg-dark-hover disabled:opacity-50 transition"
+                        className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
                     >
-                        {loading ? "保存中..." : "新規作成"}
+                        {loading ? "作成中..." : "新規作成"}
                     </button>
                 </form>
             </div>

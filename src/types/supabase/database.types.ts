@@ -3,12 +3,35 @@ export type Json =
     | number
     | boolean
     | null
-    | {
-        [key: string]: Json | undefined;
-    }
+    | { [key: string]: Json | undefined }
     | Json[];
 
 export type Database = {
+    graphql_public: {
+        Tables: {
+            [_ in never]: never;
+        };
+        Views: {
+            [_ in never]: never;
+        };
+        Functions: {
+            graphql: {
+                Args: {
+                    operationName?: string;
+                    query?: string;
+                    variables?: Json;
+                    extensions?: Json;
+                };
+                Returns: Json;
+            };
+        };
+        Enums: {
+            [_ in never]: never;
+        };
+        CompositeTypes: {
+            [_ in never]: never;
+        };
+    };
     public: {
         Tables: {
             categories: {
@@ -111,6 +134,44 @@ export type Database = {
                 };
                 Relationships: [];
             };
+            photo: {
+                Row: {
+                    caption: string | null;
+                    created_at: string | null;
+                    file_hash: string;
+                    file_path: string;
+                    id: string;
+                    public_url: string | null;
+                    temporary_spot_id: string;
+                };
+                Insert: {
+                    caption?: string | null;
+                    created_at?: string | null;
+                    file_hash: string;
+                    file_path: string;
+                    id?: string;
+                    public_url?: string | null;
+                    temporary_spot_id: string;
+                };
+                Update: {
+                    caption?: string | null;
+                    created_at?: string | null;
+                    file_hash?: string;
+                    file_path?: string;
+                    id?: string;
+                    public_url?: string | null;
+                    temporary_spot_id?: string;
+                };
+                Relationships: [
+                    {
+                        foreignKeyName: "photo_temporary_spot_id_fkey";
+                        columns: ["temporary_spot_id"];
+                        isOneToOne: false;
+                        referencedRelation: "temporary_spots";
+                        referencedColumns: ["id"];
+                    },
+                ];
+            };
             tags: {
                 Row: {
                     created_at: string | null;
@@ -178,7 +239,6 @@ export type Database = {
                     description: string;
                     end_date: string;
                     id: string;
-                    image: Json | null;
                     meta: Json | null;
                     nearest_station: string | null;
                     opening_hours: string | null;
@@ -196,7 +256,6 @@ export type Database = {
                     description: string;
                     end_date: string;
                     id?: string;
-                    image?: Json | null;
                     meta?: Json | null;
                     nearest_station?: string | null;
                     opening_hours?: string | null;
@@ -214,7 +273,6 @@ export type Database = {
                     description?: string;
                     end_date?: string;
                     id?: string;
-                    image?: Json | null;
                     meta?: Json | null;
                     nearest_station?: string | null;
                     opening_hours?: string | null;
@@ -301,11 +359,13 @@ export type Tables<
         Row: infer R;
     } ? R
     : never
-    : PublicTableNameOrOptions extends
-        keyof (PublicSchema["Tables"] & PublicSchema["Views"])
-        ? (PublicSchema["Tables"] & PublicSchema["Views"])[
-            PublicTableNameOrOptions
-        ] extends {
+    : PublicTableNameOrOptions extends keyof (
+        & PublicSchema["Tables"]
+        & PublicSchema["Views"]
+    ) ? (
+            & PublicSchema["Tables"]
+            & PublicSchema["Views"]
+        )[PublicTableNameOrOptions] extends {
             Row: infer R;
         } ? R
         : never
@@ -314,9 +374,7 @@ export type Tables<
 export type TablesInsert<
     PublicTableNameOrOptions extends
         | keyof PublicSchema["Tables"]
-        | {
-            schema: keyof Database;
-        },
+        | { schema: keyof Database },
     TableName extends PublicTableNameOrOptions extends
         { schema: keyof Database }
         ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
@@ -337,9 +395,7 @@ export type TablesInsert<
 export type TablesUpdate<
     PublicTableNameOrOptions extends
         | keyof PublicSchema["Tables"]
-        | {
-            schema: keyof Database;
-        },
+        | { schema: keyof Database },
     TableName extends PublicTableNameOrOptions extends
         { schema: keyof Database }
         ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
@@ -360,9 +416,7 @@ export type TablesUpdate<
 export type Enums<
     PublicEnumNameOrOptions extends
         | keyof PublicSchema["Enums"]
-        | {
-            schema: keyof Database;
-        },
+        | { schema: keyof Database },
     EnumName extends PublicEnumNameOrOptions extends { schema: keyof Database }
         ? keyof Database[PublicEnumNameOrOptions["schema"]]["Enums"]
         : never = never,
@@ -378,7 +432,8 @@ export type CompositeTypes<
         | { schema: keyof Database },
     CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
         schema: keyof Database;
-    } ? keyof Database[PublicCompositeTypeNameOrOptions["schema"]][
+    }
+        ? keyof Database[PublicCompositeTypeNameOrOptions["schema"]][
             "CompositeTypes"
         ]
         : never = never,

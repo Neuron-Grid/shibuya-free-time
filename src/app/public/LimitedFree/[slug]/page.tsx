@@ -1,74 +1,54 @@
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
-import { cookies } from 'next/headers';
-import type { Database } from '@/types/supabase/database.types';
-import { notFound } from 'next/navigation';
-import { SpotCard } from '@/components/partials/supabase/SpotCard';
+import React from "react";
 
-// temporary_spots テーブルの行データ型
-type TemporarySpotRow = Database['public']['Tables']['temporary_spots']['Row'];
 
-interface TemporarySpotForCard {
-    id: string;
-    slug: string;
-    title: string;
-    imageUrl?: string;
-}
+export default async function SingleLimitedFreePage({
+        params,
+    }: {
+        params: { id: string };
+    }) {
+    const { id } = params;
+    const baseUrl = "http://localhost:3000";
 
-type Props = {
-    params: {
-        slug: string;
-    };
-};
+    const res = await fetch(`${baseUrl}/api/temporary-spots/published`, {
+        next: { revalidate: 0 },
+    });
 
-// row.image が文字列 / JSON の両方に対応
-function mapRowToTemporarySpot(row: TemporarySpotRow): TemporarySpotForCard {
-    let imageUrl = '';
-    if (row.image) {
-        if (typeof row.image === 'string') {
-            imageUrl = row.image;
-        } else if (typeof row.image === 'object' && 'src' in row.image) {
-            imageUrl = (row.image as any).src as string;
-        }
+    if (!res.ok) {
+        throw new Error("Failed to fetch published temporary_spots");
     }
 
-    return {
-        id: row.id,
-        slug: row.slug,
-        title: row.title,
-        imageUrl,
-    };
-}
+    const data: TemporarySpot[] = await res.json();
+    const spot = data.find((item) => item.id === id);
 
-export default async function LimitedFreeDetailPage({ params }: Props) {
-    const supabase = createServerComponentClient<Database>({ cookies });
-
-    // slugをキーに1件取得
-    const { data, error } = await supabase
-        .from('temporary_spots')
-        .select('*')
-        .eq('slug', params.slug)
-        .single();
-
-    if (error) {
-        console.error('[LimitedFreeDetailPage Error]', error.message);
-        notFound();
+    if (!spot) {
+        return (
+            <div className="container mx-auto py-8">
+                <p>指定されたスポットは見つかりませんでした。</p>
+            </div>
+        );
     }
-    if (!data) {
-        notFound();
-    }
-
-    // SpotCard で扱う構造に変換
-    const spot = mapRowToTemporarySpot(data);
 
     return (
-        <main className="p-4">
-            <h1 className="text-2xl font-bold mb-4">期間限定無料スポット 詳細</h1>
-        {/* 詳細ページなのでリンク先は不要 */}
-        <SpotCard spot={spot} href={undefined} />
-        {/* 詳細内容などはお好みで追記 */}
-            <div className="mt-6">
-                <p>ここにスポットの詳細情報を自由に記載してください（例: 期間, 住所など）。</p>
+        <div className="container mx-auto py-8">
+            <h1 className="text-2xl font-bold mb-6">スポット詳細</h1>
+            <div className="p-4 bg-light-background dark:bg-dark-background rounded shadow">
+                <h2 className="font-semibold text-light-text dark:text-dark-text text-lg mb-2">
+                    {spot.title}
+                </h2>
+                <p className="text-light-text dark:text-dark-text mb-2">
+                    {spot.description}
+                </p>
+                <p className="text-sm text-gray-500">
+                    Status: <span className="font-medium">{spot.status}</span>
+                </p>
             </div>
-        </main>
+        </div>
     );
 }
+
+type TemporarySpot = {
+    id: string;
+    title: string;
+    description: string;
+    status: string;
+};

@@ -1,4 +1,4 @@
-import { SpotCard } from "@/components/partials/newt/SpotCard";
+import { SpotCard } from "@/components/partials/newt/afa_SpotCard";
 import { getSpots } from "@/libs/newt";
 import type { Spot } from "@/types/newt/spot_type";
 

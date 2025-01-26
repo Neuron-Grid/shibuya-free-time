@@ -1,30 +1,33 @@
 import { formatDate } from "@/libs/date";
 import type { Tag } from "@/types/newt/Tag_type";
-import type { Spot } from "@/types/newt/spot_type";
+import type { always_free_article } from "@/types/newt/always_free_article";
 import Image from "next/image";
 import Link from "next/link";
 import { MdImageNotSupported } from "react-icons/md";
 import type { JSX } from "react/jsx-runtime";
 
+// 画像がある場合に表示するコンポーネント
 const CoverImage = ({ src, alt }: { src: string; alt: string }) => {
     return (
-        <div className="container relative h-48 w-full sm:h-auto sm:w-48 flex-shrink-0 overflow-hidden">
+        <div className="relative h-48 w-full sm:h-auto sm:w-48 flex-shrink-0 overflow-hidden">
             <Image src={src} alt={alt} fill className="object-cover" loading="lazy" />
         </div>
     );
 };
 
+// 画像がない場合に表示するコンポーネント
 const NoCoverImage = () => {
     return (
-        <div className="container flex h-48 w-full sm:h-auto sm:w-48 flex-shrink-0 items-center justify-center bg-grayscale-100 dark:bg-grayscale-800 overflow-hidden">
+        <div className="flex h-48 w-full sm:h-auto sm:w-48 flex-shrink-0 items-center justify-center bg-grayscale-100 dark:bg-grayscale-800 overflow-hidden">
             <MdImageNotSupported size={40} color="#CCCCCC" />
         </div>
     );
 };
 
+// タグを表示するコンポーネント
 const Tags = ({ tags }: { tags: Tag[] }) => {
     return (
-        <ul className="container mb-2 flex flex-wrap gap-1">
+        <ul className="mb-2 flex flex-wrap gap-1">
             {tags.map((tag) => (
                 <li
                     key={tag._id}
@@ -37,22 +40,23 @@ const Tags = ({ tags }: { tags: Tag[] }) => {
     );
 };
 
-export const SpotCard = ({ spot, href, resolvedAddress }: SpotCardProps) => {
-    const { image, title, slug, tags, _sys } = spot;
+// SpotCard 本体
+export const SpotCard = ({ article, href }: AlwaysFreeArticleCardProps) => {
+    const { image, title, slug, tags, _sys } = article;
     const formattedDate = formatDate(_sys.createdAt);
 
-    let imageElement: JSX.Element;
-    if (image) {
-        imageElement = <CoverImage src={image.src} alt={title} />;
-    } else {
-        imageElement = <NoCoverImage />;
-    }
+    // 画像の有無でコンポーネントを分岐
+    const imageElement: JSX.Element = image ? (
+        <CoverImage src={image.src} alt={title} />
+    ) : (
+        <NoCoverImage />
+    );
 
     return (
-        <div className="w-full container">
+        <div className="w-full">
             <Link
                 href={href || `/public/AlwaysFree/${slug}`}
-                className="block overflow-hidden rounded-lg bg-light-background dark:bg-dark-background shadow-lg transition-transform hover:-translate-y-1 hover:shadow-xl no-underline"
+                className="block group overflow-hidden rounded-lg bg-light-background dark:bg-dark-background shadow-lg transition-transform hover:-translate-y-1 hover:shadow-xl no-underline"
                 rel="me"
             >
                 <div className="flex flex-col sm:flex-row">
@@ -65,11 +69,6 @@ export const SpotCard = ({ spot, href, resolvedAddress }: SpotCardProps) => {
                             {formattedDate}
                         </p>
                         <Tags tags={tags} />
-                        {resolvedAddress && (
-                            <p className="mt-2 text-sm text-grayscale-600 dark:text-grayscale-300">
-                                住所: {resolvedAddress}
-                            </p>
-                        )}
                     </div>
                 </div>
             </Link>
@@ -77,8 +76,7 @@ export const SpotCard = ({ spot, href, resolvedAddress }: SpotCardProps) => {
     );
 };
 
-type SpotCardProps = {
-    spot: Spot;
+type AlwaysFreeArticleCardProps = {
+    article: always_free_article;
     href?: string;
-    resolvedAddress?: string;
 };

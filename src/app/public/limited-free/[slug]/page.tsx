@@ -13,24 +13,23 @@ import { formatDate } from "@/libs/date";
 
 export const dynamic = "force-dynamic";
 
-export default async function LimitedTimeArticleDetailPage({
-        params,
-    }: LimitedTimeArticleDetailPageProps) {
-        const { slug } = params;
-        const article = await getLimitedTimeArticle(slug);
+export default async function LimitedTimeArticleDetailPage(props: LimitedTimeArticleDetailPageProps) {
+    const params = await props.params;
+    const { slug } = params;
+    const article = await getLimitedTimeArticle(slug);
 
     // 記事が存在しない場合は 404
     if (!article) {
         notFound();
     }
 
-  // 前後の記事を取得
+    // 前後の記事を取得
     const [prevArticle, nextArticle] = await Promise.all([
         getPreviousArticle(article as limited_time_article),
         getNextArticle(article as limited_time_article),
     ]);
 
-  // サーバーサイドで住所を逆ジオコーディングして取得
+    // サーバーサイドで住所を逆ジオコーディングして取得
     let resolvedAddress = "";
     if (article?.address?.lat && article?.address?.lng) {
         try {
@@ -149,7 +148,7 @@ export default async function LimitedTimeArticleDetailPage({
 }
 
 type LimitedTimeArticleDetailPageProps = {
-    params: {
+    params: Promise<{
         slug: string;
-    };
+    }>;
 };

@@ -13,9 +13,8 @@ import { formatDate } from "@/libs/date";
 
 export const dynamic = "force-dynamic";
 
-export default async function AlwaysFreeArticleDetailPage({
-        params,
-    }: AlwaysFreeArticleDetailPageProps) {
+export default async function AlwaysFreeArticleDetailPage(props: AlwaysFreeArticleDetailPageProps) {
+    const params = await props.params;
     const { slug } = params;
     const article = await getAlwaysFreeArticle(slug);
 
@@ -154,7 +153,7 @@ export default async function AlwaysFreeArticleDetailPage({
 
 
 type AlwaysFreeArticleDetailPageProps = {
-    params: {
+    params: Promise<{
         slug: string;
-    };
+    }>;
 };

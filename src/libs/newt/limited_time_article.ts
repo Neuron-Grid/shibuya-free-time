@@ -48,8 +48,7 @@ export const getLimitedTimeArticle = cache(
     },
 );
 
-// 前の limited_time_article を取得
-// 現在の createdAt より新しい記事を作成日時昇順で1件取得
+//  前の limited_time_article を取得
 export const getPreviousArticle = cache(
     async (currentArticle: limited_time_article): Promise<{ slug: string } | null> => {
         const { createdAt } = currentArticle._sys;
@@ -70,7 +69,6 @@ export const getPreviousArticle = cache(
 );
 
 // 次の limited_time_article を取得
-// 現在の createdAt より古い記事を作成日時降順で1件取得
 export const getNextArticle = cache(
     async (currentArticle: limited_time_article): Promise<{ slug: string } | null> => {
         const { createdAt } = currentArticle._sys;
@@ -91,6 +89,7 @@ export const getNextArticle = cache(
 );
 
 // タグ一覧とその使用回数を取得
+// フィールド名 "tag" が配列という前提
 export const getTags = cache(async (): Promise<TagWithCount[]> => {
     // タグを取得
     const { items: tags } = await newt_client.getContents<Tag>({
@@ -101,14 +100,15 @@ export const getTags = cache(async (): Promise<TagWithCount[]> => {
         },
     });
 
-    // limited_time_article 側に紐づいているタグ情報を取得
+    // limited_time_article 側に紐づいている tag 情報を取得
+    // Newt CMS上では "tag" フィールドが配列
     const { items: articles } = await newt_client.getContents<{
-        tags: string[];
+        tag: string[];
     }>({
         appUid: env_validation.newt_app_uid,
         modelUid: "limited_time_article",
         query: {
-            select: ["tags"],
+            select: ["tag"],
             depth: 0,
             limit: 20,
         },
@@ -116,7 +116,8 @@ export const getTags = cache(async (): Promise<TagWithCount[]> => {
 
     // タグIDごとにカウント
     const tagCountMap = new Map<string, number>();
-    for (const { tags: articleTags } of articles) {
+    for (const { tag: articleTags } of articles) {
+        if (!Array.isArray(articleTags)) continue; // 念のためガード
         for (const tagId of articleTags) {
             tagCountMap.set(tagId, (tagCountMap.get(tagId) || 0) + 1);
         }
@@ -124,11 +125,11 @@ export const getTags = cache(async (): Promise<TagWithCount[]> => {
 
     // 使用回数が1以上のタグだけ抽出
     const tagsWithCount: TagWithCount[] = tags
-        .map((tag) => ({
-            ...tag,
-            count: tagCountMap.get(tag._id) || 0,
+        .map((t) => ({
+            ...t,
+            count: tagCountMap.get(t._id) || 0,
         }))
-        .filter((tag) => tag.count > 0);
+        .filter((t) => t.count > 0);
 
     return tagsWithCount;
 });
@@ -204,13 +205,14 @@ export const getCategories = cache(async (): Promise<Category[]> => {
             query: { limit: 20 },
         }),
         newt_client.getContents<{
-            category: string[]; // depth:0 で取得するならID配列の場合が多い
+            category: Category;
         }>({
             appUid: env_validation.newt_app_uid,
             modelUid: "limited_time_article",
             query: {
                 select: ["category"],
-                depth: 0,
+                // category をオブジェクト（_id を含む）で取得
+                depth: 1,
                 limit: 20,
             },
         }),
@@ -219,12 +221,8 @@ export const getCategories = cache(async (): Promise<Category[]> => {
     // 記事で実際に使われているカテゴリーのIDを抽出
     const categoryIdsInUse = new Set<string>();
     for (const article of articles) {
-        if (Array.isArray(article.category)) {
-            for (const catId of article.category) {
-                if (catId) {
-                    categoryIdsInUse.add(catId);
-                }
-            }
+        if (article.category?._id) {
+            categoryIdsInUse.add(article.category._id);
         }
     }
 

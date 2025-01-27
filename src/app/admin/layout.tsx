@@ -10,12 +10,12 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="ja" suppressHydrationWarning>
-            <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-                <body>
+            <body>
+                <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
                     <AdminHeader />
                     <main>{children}</main>
-                </body>
-            </ThemeProvider>
+                </ThemeProvider>
+            </body>
         </html>
     );
 }

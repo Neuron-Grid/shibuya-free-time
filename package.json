@@ -13,13 +13,13 @@
   "dependencies": {
     "@supabase/auth-helpers-nextjs": "^0.10.0",
     "@supabase/ssr": "^0.5.2",
-    "@supabase/supabase-js": "^2.48.0",
+    "@supabase/supabase-js": "^2.48.1",
     "@types/uuid": "^10.0.0",
     "dompurify": "^3.2.3",
     "html-to-text": "^9.0.5",
     "luxon": "^3.5.0",
     "newt-client-js": "^3.3.7",
-    "next": "15.1.5",
+    "next": "15.1.6",
     "next-themes": "^0.4.4",
     "react": "19.0.0",
     "react-dom": "19.0.0",
@@ -31,12 +31,16 @@
     "@types/html-to-text": "^9.0.4",
     "@types/luxon": "^3.4.2",
     "@types/node": "^22",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
+    "@types/react": "19.0.8",
+    "@types/react-dom": "19.0.3",
     "@types/sha256": "^0.2.2",
     "postcss": "^8",
     "tailwindcss": "^3.4.17",
     "typescript": "^5"
   },
-  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e",
+  "overrides": {
+    "@types/react": "19.0.8",
+    "@types/react-dom": "19.0.3"
+  }
 }

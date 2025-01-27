@@ -13,7 +13,7 @@ export interface always_free_article extends Content {
     body: string;
     nearest_station: string;
     opening_hours: string;
-    category: Category[];
+    category: Category;
     tags: Tag[];
     address: Address;
     start_day: string;

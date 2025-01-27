@@ -1,6 +1,6 @@
 import { formatDate } from "@/libs/date";
 import type { Tag } from "@/types/newt/Tag_type";
-import type { always_free_article } from "@/types/newt/always_free_article";
+import type { limited_time_article } from "@/types/newt/limited_time_article";
 import Image from "next/image";
 import Link from "next/link";
 import { MdImageNotSupported } from "react-icons/md";
@@ -26,7 +26,6 @@ const NoCoverImage = () => {
 
 // タグを表示するコンポーネント
 const Tags = ({ tags }: { tags?: Tag[] }) => {
-    // `tags` が undefined なら空配列を割り当てる
     const safeTags = tags ?? [];
     return (
         <ul className="mb-2 flex flex-wrap gap-1">
@@ -43,13 +42,13 @@ const Tags = ({ tags }: { tags?: Tag[] }) => {
 };
 
 // SpotCard 本体
-export const SpotCard = ({ article, href }: AlwaysFreeArticleCardProps) => {
-    const { image, title, slug, tags, _sys } = article;
+export const SpotCard = ({ article, href }: LimitedTimeArticleCardProps) => {
+    const { Image: coverImage, title, slug, tag, _sys } = article;
     const formattedDate = formatDate(_sys.createdAt);
 
     // 画像の有無でコンポーネントを分岐
-    const imageElement: JSX.Element = image ? (
-        <CoverImage src={image.src} alt={title} />
+    const imageElement: JSX.Element = coverImage ? (
+        <CoverImage src={coverImage.src} alt={title} />
     ) : (
         <NoCoverImage />
     );
@@ -57,7 +56,7 @@ export const SpotCard = ({ article, href }: AlwaysFreeArticleCardProps) => {
     return (
         <div className="w-full">
             <Link
-                href={href || `/public/AlwaysFree/${slug}`}
+                href={href || `/public/limited-free/${slug}`}
                 className="block group overflow-hidden rounded-lg bg-light-background dark:bg-dark-background shadow-lg transition-transform hover:-translate-y-1 hover:shadow-xl no-underline"
                 rel="me"
             >
@@ -70,7 +69,7 @@ export const SpotCard = ({ article, href }: AlwaysFreeArticleCardProps) => {
                         <p className="mb-2 text-sm text-grayscale-500 dark:text-grayscale-400">
                             {formattedDate}
                         </p>
-                        <Tags tags={tags} />
+                        <Tags tags={tag} />
                     </div>
                 </div>
             </Link>
@@ -78,7 +77,8 @@ export const SpotCard = ({ article, href }: AlwaysFreeArticleCardProps) => {
     );
 };
 
-type AlwaysFreeArticleCardProps = {
-    article: always_free_article;
+// コンポーネント用の型定義
+type LimitedTimeArticleCardProps = {
+    article: limited_time_article;
     href?: string;
 };

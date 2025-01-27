@@ -6,7 +6,7 @@ import { RxCross2, RxHamburgerMenu } from "react-icons/rx";
 
 const navLinks: NavLink[] = [
     { href: "/public/AlwaysFree", label: "常時無料" },
-    { href: "/public/LimitedFree", label: "期間限定無料" },
+    { href: "/public/limited-free", label: "期間限定無料" },
 ];
 
 const public_Header: React.FC = () => {

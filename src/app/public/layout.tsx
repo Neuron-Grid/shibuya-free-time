@@ -14,22 +14,22 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="ja" suppressHydrationWarning>
-            <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
                 <body className="min-h-screen flex flex-col">
-                    <div className="bg-light-background dark:bg-dark-background flex flex-col flex-grow">
-                        <Suspense fallback={<Loading />}>
-                            <Header />
-                            <div className="flex flex-col lg:flex-row flex-grow">
-                                <main className="lg:w-3/4 flex-grow">{children}</main>
-                                <aside className="lg:w-1/4">
-                                    <Side />
-                                </aside>
-                            </div>
-                            <Footer />
-                        </Suspense>
-                    </div>
+                    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+                        <div className="bg-light-background dark:bg-dark-background flex flex-col flex-grow">
+                            <Suspense fallback={<Loading />}>
+                                <Header />
+                                <div className="flex flex-col lg:flex-row flex-grow">
+                                    <main className="lg:w-3/4 flex-grow">{children}</main>
+                                    <aside className="lg:w-1/4">
+                                        <Side />
+                                    </aside>
+                                </div>
+                                <Footer />
+                            </Suspense>
+                        </div>
+                    </ThemeProvider>
                 </body>
-            </ThemeProvider>
         </html>
     );
 }

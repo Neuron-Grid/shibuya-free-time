@@ -11,8 +11,8 @@ export interface limited_time_article extends Content {
     Image?: Media;
     author: Author;
     body: string;
-    tags: Tag[];
-    category: Category[];
+    tag: Tag[];
+    category: Category;
     address: Address;
     start_day: string;
     end_day: string;

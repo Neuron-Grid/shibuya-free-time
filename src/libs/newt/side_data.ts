@@ -53,9 +53,6 @@ export const getUnifiedCategories = cache(async (): Promise<Category[]> => {
 
 // タグとカテゴリを両方取得
 export const getAllTagsAndCategories = cache(async () => {
-    const [tags, categories] = await Promise.all([
-        getUnifiedTags(),
-        getUnifiedCategories(),
-    ]);
+    const [tags, categories] = await Promise.all([getUnifiedTags(), getUnifiedCategories()]);
     return { tags, categories };
 });

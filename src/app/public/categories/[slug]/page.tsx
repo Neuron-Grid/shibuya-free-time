@@ -2,7 +2,8 @@ import { getAlwaysFreeArticles } from "@/libs/newt/always_free_article";
 import { getLimitedTimeArticles } from "@/libs/newt/limited_time_article";
 import Link from "next/link";
 
-export default async function CategoryPage({ params }: PageProps) {
+export default async function CategoryPage(props: PageProps) {
+    const params = await props.params;
     const { slug } = params;
 
     // always_free_article 側の記事を取得
@@ -67,5 +68,5 @@ export default async function CategoryPage({ params }: PageProps) {
 }
 
 type PageProps = {
-    params: { slug: string };
+    params: Promise<{ slug: string }>;
 };

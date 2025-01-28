@@ -2,7 +2,8 @@ import { getTagslug, getLimitedTimeArticles } from "@/libs/newt/limited_time_art
 import { getTagsFromAlwaysFree, getAlwaysFreeArticles } from "@/libs/newt/always_free_article";
 import Link from "next/link";
 
-export default async function TagsPage({ params }: PageProps) {
+export default async function TagsPage(props: PageProps) {
+    const params = await props.params;
     const { slug } = params;
 
     // タグ情報を取得 (limited_time_article 側の関数を流用)
@@ -88,5 +89,5 @@ export default async function TagsPage({ params }: PageProps) {
 
 // 型定義
 type PageProps = {
-    params: { slug: string };
+    params: Promise<{ slug: string }>;
 };

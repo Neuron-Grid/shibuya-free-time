@@ -43,9 +43,8 @@ async function loadArticleData(slug: string) {
     };
 }
 
-export default async function AlwaysFreeArticleDetailPage({
-        params,
-    }: AlwaysFreeArticleDetailPageProps) {
+export default async function AlwaysFreeArticleDetailPage(props: AlwaysFreeArticleDetailPageProps) {
+    const params = await props.params;
     const { slug } = params;
 
     // データ取得部分を専用関数に委譲
@@ -59,7 +58,7 @@ export default async function AlwaysFreeArticleDetailPage({
     // データを取り出し
     const { article, prevArticle, nextArticle, resolvedAddress } = data;
 
-  // 画面描画
+    // 画面描画
     return (
         <div className="bg-light-background dark:bg-dark-background text-light-text dark:text-dark-text">
             <div className="max-w-screen-lg mx-auto p-4">
@@ -162,7 +161,7 @@ export default async function AlwaysFreeArticleDetailPage({
 }
 
 type AlwaysFreeArticleDetailPageProps = {
-    params: {
+    params: Promise<{
         slug: string;
-    };
+    }>;
 };

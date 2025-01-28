@@ -229,3 +229,19 @@ export const getCategories = cache(async (): Promise<Category[]> => {
     // 記事で使われているカテゴリーのみ返す
     return categories.filter((category) => categoryIdsInUse.has(category._id));
 });
+
+// 開始日と終了日を取得する
+export const getArticleDate = cache(
+    async (slug: string): Promise<{ start: string; end: string } | null> => {
+        const article = await newt_client.getFirstContent<limited_time_article>({
+            appUid: env_validation.newt_app_uid,
+            modelUid: "limited_time_article",
+            query: {
+                slug,
+                select: ["start_day", "end_day"],
+                depth: 0,
+            },
+        });
+        return article ? { start: article.start_day, end: article.end_day } : null;
+    },
+);

@@ -3,6 +3,7 @@ import Link from "next/link";
 import type React from "react";
 
 const Side: React.FC = async () => {
+    // タグ＆カテゴリをまとめて取得
     const { tags, categories } = await getAllTagsAndCategories();
 
     return (
@@ -35,7 +36,7 @@ const Side: React.FC = async () => {
                                     href={`/public/tags/${tag.slug}`}
                                     className="text-blue-500 hover:underline"
                                 >
-                                    {tag.name} ({tag.count})
+                                    {tag.name}
                                 </Link>
                             </li>
                         ))}

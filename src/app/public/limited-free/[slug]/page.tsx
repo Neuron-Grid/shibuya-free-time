@@ -13,6 +13,7 @@ import { MdImageNotSupported } from "react-icons/md";
 import { formatDate } from "@/libs/date";
 import { reverseGeocode } from "@/features/reverseGeocode";
 
+
 const SanitizedContent = dynamic(() => import("@/components/partials/SanitizedContent"));
 
 async function loadArticleData(slug: string) {
@@ -124,9 +125,11 @@ export default async function LimitedTimeArticleDetailPage(props: LimitedTimeArt
                 {/* 記事詳細 */}
                 {article.body && (
                     <div className="prose dark:prose-invert mt-4">
-                        <SanitizedContent html={article.body} />
+                        <SanitizedContent content={article.body} />
                     </div>
                 )}
+
+
 
                 {/* 前の記事・次の記事へのリンク */}
                 <div className="mt-8 flex justify-between text-sm">

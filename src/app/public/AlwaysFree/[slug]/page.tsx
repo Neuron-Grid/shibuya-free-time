@@ -124,7 +124,7 @@ export default async function AlwaysFreeArticleDetailPage({
                 {/* 記事詳細 */}
                 {article.body && (
                     <div className="prose dark:prose-invert mt-4">
-                        <SanitizedContent html={article.body} />
+                        <SanitizedContent content={article.body} />
                     </div>
                 )}
 

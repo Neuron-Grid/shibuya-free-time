@@ -48,9 +48,8 @@ export const getAlwaysFreeArticle = cache(
     },
 );
 
-/**
- * 前の always_free_article を取得 (例: 作成日の昇順で1つ後ろ)
- */
+//  前のalways_free_articleを取得
+// 例: 作成日の昇順で1つ後ろ
 export const getPreviousArticle = cache(
     async (currentArticle: always_free_article): Promise<{ slug: string } | null> => {
         const { createdAt } = currentArticle._sys;
@@ -70,7 +69,8 @@ export const getPreviousArticle = cache(
     },
 );
 
-// 次の always_free_article を取得 (例: 作成日の降順で1つ前)
+// 次の always_free_article を取得
+// 例: 作成日の降順で1つ前
 export const getNextArticle = cache(
     async (currentArticle: always_free_article): Promise<{ slug: string } | null> => {
         const { createdAt } = currentArticle._sys;

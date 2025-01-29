@@ -6,6 +6,7 @@ import "./globals.css";
 export const metadata: Metadata = {
     title: "渋谷フリータイム",
     description: "無料でこんなに楽しめる！渋谷の隠れた魅力を発見",
+    appleWebApp: true,
     robots: {
         index: false,
         follow: false,

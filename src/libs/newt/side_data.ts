@@ -25,13 +25,13 @@ function unifyTags(allTags: TagWithCount[]): TagWithCount[] {
 }
 
 // カテゴリ配列を ID で重複排除して返す
-function unifyCategories(allCategories: Category[]): Category[] {
-    const map = allCategories.reduce<Map<string, Category>>((acc, cat) => {
-        acc.set(cat._id, cat);
-        return acc;
-    }, new Map());
-    return Array.from(map.values());
-}
+// function unifyCategories(allCategories: Category[]): Category[] {
+//     const map = allCategories.reduce<Map<string, Category>>((acc, cat) => {
+//         acc.set(cat._id, cat);
+//         return acc;
+//     }, new Map());
+//     return Array.from(map.values());
+// }
 
 // タグをまとめて取得
 export const getUnifiedTags = cache(async (): Promise<TagWithCount[]> => {
@@ -48,7 +48,7 @@ export const getUnifiedCategories = cache(async (): Promise<Category[]> => {
         getLimitedCategories(),
         getAlwaysFreeCategories(),
     ]);
-    return unifyCategories([...limitedCategories, ...alwaysFreeCategories]);
+    return [...limitedCategories, ...alwaysFreeCategories];
 });
 
 // タグとカテゴリを両方取得

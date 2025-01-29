@@ -1,3 +1,5 @@
+// Supabase用のSpotCardコンポーネント
+
 import { formatDate } from "@/libs/date";
 import Image from "next/image";
 import Link from "next/link";

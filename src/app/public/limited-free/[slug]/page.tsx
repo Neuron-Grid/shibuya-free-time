@@ -1,4 +1,3 @@
-import dynamic from "next/dynamic";
 import React from "react";
 import { notFound } from "next/navigation";
 import {
@@ -12,9 +11,7 @@ import Link from "next/link";
 import { MdImageNotSupported } from "react-icons/md";
 import { formatDate } from "@/libs/date";
 import { reverseGeocode } from "@/features/reverseGeocode";
-
-
-const SanitizedContent = dynamic(() => import("@/components/partials/SanitizedContent"));
+import TypographyWrapper from "@/components/partials/TypographyWrapper";
 
 async function loadArticleData(slug: string) {
     const article = await getLimitedTimeArticle(slug);
@@ -124,12 +121,10 @@ export default async function LimitedTimeArticleDetailPage(props: LimitedTimeArt
 
                 {/* 記事詳細 */}
                 {article.body && (
-                    <div className="prose dark:prose-invert mt-4">
-                        <SanitizedContent content={article.body} />
+                    <div className="mt-8 prose prose-lg dark:prose-invert">
+                        <TypographyWrapper htmlContent={article.body} />
                     </div>
                 )}
-
-
 
                 {/* 前の記事・次の記事へのリンク */}
                 <div className="mt-8 flex justify-between text-sm">

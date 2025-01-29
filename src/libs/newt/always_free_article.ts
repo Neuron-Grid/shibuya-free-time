@@ -2,6 +2,7 @@ import { newt_client } from "@/libs/newt/newt_client";
 import type { Category } from "@/types/newt/Category_type";
 import type { Tag, TagWithCount } from "@/types/newt/Tag_type";
 import type { always_free_article } from "@/types/newt/always_free_article";
+import type { Author } from "@/types/newt/author";
 import { env_validation } from "@/utils/env_validation";
 import type { AppMeta, GetContentsQuery } from "newt-client-js";
 import { cache } from "react";
@@ -47,6 +48,20 @@ export const getAlwaysFreeArticle = cache(
         return article || null;
     },
 );
+
+export const getAuthorByArticleSlug = cache(async (slug: string): Promise<Author | null> => {
+    const article = await getAlwaysFreeArticle(slug);
+    if (!article || !article.author) return null;
+
+    // article.authorは_idしか含まれない場合があるので、完全な情報を取得する
+    const author = await newt_client.getContent<Author>({
+        appUid: env_validation.newt_app_uid,
+        modelUid: "author",
+        contentId: article.author._id,
+    });
+
+    return author;
+});
 
 //  前のalways_free_articleを取得
 // 例: 作成日の昇順で1つ後ろ

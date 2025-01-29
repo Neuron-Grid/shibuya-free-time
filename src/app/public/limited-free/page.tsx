@@ -1,6 +1,6 @@
 import React from "react";
 import { SpotCard } from "@/components/partials/newt/lta_SpotCard";
-import { getLimitedTimeArticles } from "@/libs/newt/limited_time_article";
+import { getLimitedTimeArticles } from "@/libs/newt/lta/limited_time_article";
 import type { limited_time_article } from "@/types/newt/limited_time_article";
 
 const LimitedTimePage = async () => {

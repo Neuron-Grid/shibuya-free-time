@@ -1,53 +1,18 @@
 import React from "react";
 import { notFound } from "next/navigation";
-import {
-    getLimitedTimeArticle,
-    getPreviousArticle,
-    getNextArticle,
-} from "@/libs/newt/limited_time_article";
-import type { limited_time_article } from "@/types/newt/limited_time_article";
 import Image from "next/image";
 import Link from "next/link";
 import { MdImageNotSupported } from "react-icons/md";
 import { formatDate } from "@/libs/date";
-import { reverseGeocode } from "@/features/reverseGeocode";
 import TypographyWrapper from "@/components/partials/TypographyWrapper";
-
-async function loadArticleData(slug: string) {
-    const article = await getLimitedTimeArticle(slug);
-
-    // 記事が取得できなければ null
-    if (!article) {
-        return null;
-    }
-
-    // 前後の記事を並行取得
-    const [prevArticle, nextArticle] = await Promise.all([
-        getPreviousArticle(article as limited_time_article),
-        getNextArticle(article as limited_time_article),
-    ]);
-
-    // 逆ジオコーディング
-    let resolvedAddress = "";
-    if (article.address?.lat && article.address?.lng) {
-        const result = await reverseGeocode(article.address.lat, article.address.lng);
-        resolvedAddress = result ?? "";
-    }
-
-    return {
-        article,
-        prevArticle,
-        nextArticle,
-        resolvedAddress,
-    };
-}
+import load_lta_data from "@/libs/newt/lta/load_lta_data";
 
 export default async function LimitedTimeArticleDetailPage(props: LimitedTimeArticleDetailPageProps) {
     const params = await props.params;
     const { slug } = params;
 
     // データ取得部分を専用関数に委譲
-    const data = await loadArticleData(slug);
+    const data = await load_lta_data(slug);
 
     // 記事が存在しない場合は 404
     if (!data) {

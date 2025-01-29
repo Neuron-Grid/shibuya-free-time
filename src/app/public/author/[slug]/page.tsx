@@ -5,9 +5,8 @@ import React from "react";
 import { MdImageNotSupported } from "react-icons/md";
 import TypographyWrapper from "@/components/partials/TypographyWrapper";
 
-export default async function AuthorDetailPage({
-    params: { slug },
-}: AuthorDetailPageProps) {
+export default async function AuthorDetailPage(props: AuthorDetailPageProps) {
+    const { slug } = await props.params;
     const author = await getAuthor(slug);
 
     if (!author) {
@@ -46,7 +45,7 @@ export default async function AuthorDetailPage({
 }
 
 type AuthorDetailPageProps = {
-    params: {
+    params: Promise<{
         slug: string;
-    };
+    }>;
 };

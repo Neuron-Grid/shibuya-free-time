@@ -1,5 +1,5 @@
-import { getAlwaysFreeArticles } from "@/libs/newt/always_free_article";
-import { getLimitedTimeArticles } from "@/libs/newt/limited_time_article";
+import { getAlwaysFreeArticles } from "@/libs/newt/afa/always_free_article";
+import { getLimitedTimeArticles } from "@/libs/newt/lta/limited_time_article";
 import Link from "next/link";
 
 export default async function CategoryPage(props: PageProps) {

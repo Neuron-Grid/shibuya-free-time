@@ -53,7 +53,7 @@ export const getAuthorByArticleSlug = cache(async (slug: string): Promise<Author
     const article = await getAlwaysFreeArticle(slug);
     if (!article || !article.author) return null;
 
-    // article.authorは_idしか含まれない場合があるので、完全な情報を取得する
+    // 完全な情報を取得する
     const author = await newt_client.getContent<Author>({
         appUid: env_validation.newt_app_uid,
         modelUid: "author",
@@ -63,7 +63,7 @@ export const getAuthorByArticleSlug = cache(async (slug: string): Promise<Author
     return author;
 });
 
-//  前のalways_free_articleを取得
+// 前のalways_free_articleを取得
 // 例: 作成日の昇順で1つ後ろ
 export const getPreviousArticle = cache(
     async (currentArticle: always_free_article): Promise<{ slug: string } | null> => {

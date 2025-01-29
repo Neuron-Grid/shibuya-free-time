@@ -34,31 +34,41 @@ const classMap: { [key: string]: string } = {
 };
 
 // html-react-parser のオプション
+// TypographyWrapper.tsx (抜粋)
 const options: HTMLReactParserOptions = {
     replace: (domNode: DOMNode, index: number): string | JSX.Element | null => {
-        // タグノードの場合
         if (domNode.type === "tag") {
-            const el = domNode as DomElement; // Element 型にキャスト
+            const el = domNode as DomElement;
             const { name, attribs, children } = el;
             const className = classMap[name] || "";
 
-            // children がある場合だけ再帰的にパース
+            // 1. hr タグは子要素を持ってはいけないので特別扱いする
+            if (name === "hr") {
+                // 余計な children を与えずに返す
+                return React.createElement("hr", { ...attribs, className, key: index });
+            }
+
+            // 2. br タグの例
+            if (name === "br") {
+                return React.createElement("br", { key: index });
+            }
+
+            // 3. それ以外のタグ
             const content = children?.map((child, idx) => {
                 if (child.type === "tag" || child.type === "text") {
-                    // 再帰呼び出し
                     return options.replace?.(child, idx) ?? null;
                 }
                 return null;
             }) as React.ReactNode[];
-
             return React.createElement(name, { ...attribs, className, key: index }, content);
         }
 
-        // テキストノードの場合
+        // テキストノードならそのまま返す
         if (domNode.type === "text") {
             const textNode = domNode as DomText;
             return textNode.data;
         }
+
         return null;
     },
 };

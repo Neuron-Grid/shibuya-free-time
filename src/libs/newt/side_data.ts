@@ -1,11 +1,11 @@
 import {
     getCategoriesFromAlwaysFree as getAlwaysFreeCategories,
     getTagsFromAlwaysFree as getAlwaysFreeTags,
-} from "@/libs/newt/always_free_article";
+} from "@/libs/newt/afa/always_free_article";
 import {
     getCategories as getLimitedCategories,
     getTags as getLimitedTags,
-} from "@/libs/newt/limited_time_article";
+} from "@/libs/newt/lta/limited_time_article";
 import type { Category } from "@/types/newt/Category_type";
 import type { TagWithCount } from "@/types/newt/Tag_type";
 import { cache } from "react";

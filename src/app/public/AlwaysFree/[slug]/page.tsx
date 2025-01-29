@@ -1,53 +1,17 @@
 import React from "react";
 import { notFound } from "next/navigation";
-import {
-    getAlwaysFreeArticle,
-    getPreviousArticle,
-    getNextArticle,
-    getAuthorByArticleSlug,
-} from "@/libs/newt/always_free_article";
-import type { always_free_article } from "@/types/newt/always_free_article";
 import Image from "next/image";
 import Link from "next/link";
 import { MdImageNotSupported } from "react-icons/md";
 import { formatDate } from "@/libs/date";
-import { reverseGeocode } from "@/features/reverseGeocode";
 import TypographyWrapper from "@/components/partials/TypographyWrapper";
+import load_afa_data from "@/libs/newt/afa/load_afa_data"
 
-
-const loadArticleData = async (slug: string) => {
-    const article = await getAlwaysFreeArticle(slug);
-
-    if (!article) {
-        return null;
-    }
-
-    const [author, prevArticle, nextArticle] = await Promise.all([
-        getAuthorByArticleSlug(slug),
-        getPreviousArticle(article as always_free_article),
-        getNextArticle(article as always_free_article),
-    ]);
-
-    let resolvedAddress = "";
-    if (article?.address?.lat && article?.address?.lng) {
-        const result = await reverseGeocode(article.address.lat, article.address.lng);
-        resolvedAddress = result ?? "";
-    }
-
-    return {
-        article,
-        author,
-        prevArticle,
-        nextArticle,
-        resolvedAddress,
-    };
-};
+export const revalidate = 0;
 
 export default async function AlwaysFreeArticleDetailPage(props: AlwaysFreeArticleDetailPageProps) {
-    const { params } = props;
-    const { slug } = params;
-
-    const data = await loadArticleData(slug);
+    const { slug } = await props.params;
+    const data = await load_afa_data(slug);
 
     if (!data) {
         notFound();
@@ -151,7 +115,7 @@ export default async function AlwaysFreeArticleDetailPage(props: AlwaysFreeArtic
 }
 
 type AlwaysFreeArticleDetailPageProps = {
-    params: {
+    params: Promise<{
         slug: string;
-    };
+    }>;
 };

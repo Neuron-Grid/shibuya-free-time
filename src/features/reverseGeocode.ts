@@ -1,3 +1,4 @@
+"use server";
 import { env_validation } from "@/utils/env_validation";
 import axios from "axios";
 

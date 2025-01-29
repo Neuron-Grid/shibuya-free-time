@@ -1,5 +1,5 @@
 import { SpotCard } from "@/components/partials/newt/afa_SpotCard";
-import { getAlwaysFreeArticles } from "@/libs/newt/always_free_article";
+import { getAlwaysFreeArticles } from "@/libs/newt/afa/always_free_article";
 import type { always_free_article } from "@/types/newt/always_free_article";
 import React from "react";
 

@@ -24,15 +24,6 @@ function unifyTags(allTags: TagWithCount[]): TagWithCount[] {
     return Array.from(map.values());
 }
 
-// カテゴリ配列を ID で重複排除して返す
-// function unifyCategories(allCategories: Category[]): Category[] {
-//     const map = allCategories.reduce<Map<string, Category>>((acc, cat) => {
-//         acc.set(cat._id, cat);
-//         return acc;
-//     }, new Map());
-//     return Array.from(map.values());
-// }
-
 // タグをまとめて取得
 export const getUnifiedTags = cache(async (): Promise<TagWithCount[]> => {
     const [limitedTags, alwaysFreeTags] = await Promise.all([

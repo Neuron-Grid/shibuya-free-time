@@ -17,10 +17,6 @@ export default async function TagsPage(props: PageProps) {
         );
     }
 
-    // always_free_article 側のタグ一覧を取得 (カウント含む)
-    const tagsFromAlwaysFree = await getTagsFromAlwaysFree();
-    const currentTagCount = tagsFromAlwaysFree.find((t) => t._id === tag._id)?.count ?? 0;
-
     // 3. always_free_article の記事を取得
     // 「tag._id」に該当する記事を全件取得 (タグがオブジェクト参照)
     const { articles: alwaysFreeArticles } = await getAlwaysFreeArticles({
@@ -61,7 +57,7 @@ export default async function TagsPage(props: PageProps) {
         <div className="container mx-auto p-4">
             {/* タグ名と always_free_article 側での使用回数を例として表示 */}
             <h2 className="text-xl font-semibold mb-4">
-                タグ: {tag.name} (always_free_article側の使用回数: {currentTagCount})
+                タグ: {tag.name}
             </h2>
 
             <div className="space-y-4">

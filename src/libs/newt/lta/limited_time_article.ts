@@ -18,7 +18,10 @@ export const getApp = cache(async (): Promise<AppMeta> => {
 export const getLimitedTimeArticles = cache(
     async (
         query?: GetContentsQuery,
-    ): Promise<{ articles: limited_time_article[]; total: number }> => {
+    ): Promise<{
+        articles: limited_time_article[];
+        total: number;
+    }> => {
         const { items: articles, total } = await newt_client.getContents<limited_time_article>({
             appUid: env_validation.newt_app_uid,
             modelUid: "limited_time_article",

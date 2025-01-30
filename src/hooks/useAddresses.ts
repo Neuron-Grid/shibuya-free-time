@@ -8,7 +8,7 @@ const getAddresses = async (spots: SpotType[]): Promise<Record<string, string>> 
     const addressMap: Record<string, string> = {};
 
     for (const spot of spots) {
-        // spot.address が存在し、かつ lat/lng が数値ならジオコーディングする
+        // address が存在し、かつ lat/lng が数値ならジオコーディングする
         if (
             spot.address &&
             typeof spot.address.lat === "number" &&

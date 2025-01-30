@@ -8,10 +8,10 @@ import type { Content, Media } from "newt-client-js";
 export interface limited_time_article extends Content {
     title: string;
     slug: string;
-    Image?: Media;
+    image?: Media;
     author: Author;
     body: string;
-    tag: Tag[];
+    tags: Tag[];
     category: Category;
     address: Address;
     start_day: string;

@@ -43,7 +43,7 @@ const Tags = ({ tags }: { tags?: Tag[] }) => {
 
 // SpotCard 本体
 export const SpotCard = ({ article, href }: LimitedTimeArticleCardProps) => {
-    const { Image: coverImage, title, slug, tag, _sys } = article;
+    const { image: coverImage, title, slug, tags, _sys } = article;
     const formattedDate = formatDate(_sys.createdAt);
 
     // 画像の有無でコンポーネントを分岐
@@ -69,7 +69,7 @@ export const SpotCard = ({ article, href }: LimitedTimeArticleCardProps) => {
                         <p className="mb-2 text-sm text-grayscale-500 dark:text-grayscale-400">
                             {formattedDate}
                         </p>
-                        <Tags tags={tag} />
+                        <Tags tags={tags} />
                     </div>
                 </div>
             </Link>

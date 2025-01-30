@@ -7,7 +7,6 @@ import { formatDate } from "@/libs/date";
 import TypographyWrapper from "@/components/partials/TypographyWrapper";
 import load_afa_data from "@/libs/newt/afa/load_afa_data"
 
-export const revalidate = 0;
 
 export default async function AlwaysFreeArticleDetailPage(props: AlwaysFreeArticleDetailPageProps) {
     const { slug } = await props.params;
@@ -18,6 +17,7 @@ export default async function AlwaysFreeArticleDetailPage(props: AlwaysFreeArtic
     }
 
     const { article, author, prevArticle, nextArticle, resolvedAddress } = data;
+    console.log("DEBUG: data =>", data);
 
     return (
         <div className="bg-light-background dark:bg-dark-background text-light-text dark:text-dark-text cen">
@@ -47,20 +47,31 @@ export default async function AlwaysFreeArticleDetailPage(props: AlwaysFreeArtic
                 {author && (
                     <div className="mb-4">
                         <p className="text-lg font-semibold">
-                            著者: {author.fullName} (
-                            <Link href="/public/author" className="text-light-accent dark:text-dark-accent hover:underline">
-                                詳細はこちら
+                            著者:
+                            <Link
+                                href={`/public/author/${author.slug}`}
+                                className="text-light-accent dark:text-dark-accent hover:underline"
+                            >
+                                {author.fullName}
                             </Link>
-                        )
                         </p>
                     </div>
                 )}
 
+                {/* タグ */}
                 {article.tags?.length > 0 && (
                     <ul className="mb-4 flex flex-wrap gap-2">
                         {article.tags.map((tag) => (
-                            <li key={tag._id} className="px-2 py-1 rounded">
-                                #{tag.name}
+                            <li
+                                key={tag._id}
+                                className="px-2 py-1 rounded bg-grayscale-200 dark:bg-grayscale-700 text-grayscale-700 dark:text-grayscale-200"
+                            >
+                                <Link
+                                    href={`/public/tags/${tag.slug}`}
+                                    className="text-light-accent dark:text-dark-accent hover:underline"
+                                >
+                                    #{tag.name}
+                                </Link>
                             </li>
                         ))}
                     </ul>

@@ -11,6 +11,9 @@ const AlwaysFreePage = async () => {
             <div className="max-w-screen-lg mx-auto p-4">
                 <section className="mb-12 w-full">
                     <h2 className="mb-4 text-xl font-semibold">スポット一覧</h2>
+                    <p className="mt-4 text-sm text-grayscale-600 dark:text-grayscale-400">
+                        全{total}件
+                    </p>
                     <ul className="space-y-4">
                         {articles.map((article: always_free_article) => (
                         <li key={article._id}>
@@ -18,9 +21,6 @@ const AlwaysFreePage = async () => {
                         </li>
                         ))}
                     </ul>
-                    <p className="mt-4 text-sm text-grayscale-600 dark:text-grayscale-400">
-                        全{total}件
-                    </p>
                 </section>
             </div>
         </div>

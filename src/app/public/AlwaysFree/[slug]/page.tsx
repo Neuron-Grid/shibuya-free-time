@@ -17,7 +17,6 @@ export default async function AlwaysFreeArticleDetailPage(props: AlwaysFreeArtic
     }
 
     const { article, author, prevArticle, nextArticle, resolvedAddress } = data;
-    console.log("DEBUG: data =>", data);
 
     return (
         <div className="bg-light-background dark:bg-dark-background text-light-text dark:text-dark-text cen">

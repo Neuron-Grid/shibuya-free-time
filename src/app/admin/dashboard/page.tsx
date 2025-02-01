@@ -3,8 +3,8 @@ import React from "react";
 
 export default function AdminDashboardPage() {
     return (
-        <div className="container">
-            <div className="py-8 px-4min-h-screen">
+        <div className="bg-light-background dark:bg-dark-background min-h-screen">
+            <div className="container py-8 px-4">
                 <h1 className="text-3xl font-bold mb-8 text-light-text dark:text-dark-text">
                     管理者用ダッシュボード
                 </h1>
@@ -15,9 +15,12 @@ export default function AdminDashboardPage() {
                         <Link
                             key={link.href}
                             href={link.href}
-                            className="block p-6 rounded dark:bg-dark.hover dark:text-dark-text hover:shadow-lg transition-shadow dark:hover:bg-dark.hover"
+                            className={`
+                                block p-6 rounded bg-light-background text-light-text hover:bg-light-hover dark:bg-dark-background dark:text-dark-text dark:hover:bg-dark-hover hover:shadow-lg transition-shadow
+                            `}
                         >
                             <h2 className="text-xl font-semibold mb-2">{link.label}</h2>
+                            {/* ここでのテキストカラーは淡めにする例として gray-400 or カスタム定義 */}
                             <p className="text-sm text-gray-500 dark:text-gray-400">
                                 Click to manage {link.label.toLowerCase().replace("manage ", "")}
                             </p>
@@ -33,7 +36,7 @@ export default function AdminDashboardPage() {
 const adminLinks: AdminLink[] = [
     { href: "/admin/dashboard/categories", label: "カテゴリーの管理" },
     { href: "/admin/dashboard/tags", label: "タグの管理" },
-    { href: "/admin/dashboard/newsletter-issues", label: "ニュースレターの課題を課題" },
+    { href: "/admin/dashboard/newsletter-issues", label: "ニュースレターの課題を管理" },
     { href: "/admin/dashboard/newsletter-sends", label: "ニュースレターの送信を管理" },
     {
         href: "/admin/dashboard/newsletter-subscribers",

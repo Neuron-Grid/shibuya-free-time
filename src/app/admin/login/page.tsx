@@ -5,15 +5,23 @@ import React from "react";
 
 export default function LoginPage() {
     return (
-        <div className="bg-light-background text-light-text dark:bg-dark-background dark:text-dark-text">
+        <div className="bg-light-background text-light-text dark:bg-dark-background dark:text-dark-text min-h-screen">
             <div className="container">
-                <div className="p-4 sm:p-8 flex min-h-screen items-start justify-center">
+                <div className="p-4 sm:p-8 flex items-start justify-center">
                     <form
-                        aria-label="Login Form"
-                        className="relative w-full max-w-sm rounded-md p-6 mt-10 sm:mt-16 md:mt-20 pb-20"
+                        aria-labelledby="login-form-title"
+                        className="relative w-full max-w-sm rounded p-6 mt-10 sm:mt-16 md:mt-20 pb-20"
+                        method="POST"
                     >
+                        <h2
+                            id="login-form-title"
+                            className="text-lg font-bold mb-4 text-light-text dark:text-dark-text"
+                        >
+                            Login Form
+                        </h2>
+
                         {/* Email */}
-                        <div>
+                        <div className="mb-4">
                             <label className="mb-1 block font-semibold" htmlFor="email">
                                 Email
                             </label>
@@ -22,14 +30,13 @@ export default function LoginPage() {
                                 name="email"
                                 type="email"
                                 required
-                                aria-required="true"
-                                aria-label="Email address"
-                                className="w-full rounded-md border border-grayscale-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-light-accent dark:border-grayscale-700 dark:focus:ring-dark-accent"
+                                placeholder="Enter your email"
+                                className="w-full rounded border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-light-accent dark:focus:ring-dark-accent"
                             />
                         </div>
 
-                        {/* password */}
-                        <div className="relative">
+                        {/* Password */}
+                        <div className="mb-4 relative">
                             <label className="mb-1 block font-semibold" htmlFor="password">
                                 Password
                             </label>
@@ -38,9 +45,8 @@ export default function LoginPage() {
                                 name="password"
                                 type="password"
                                 required
-                                aria-required="true"
-                                aria-label="Password"
-                                className="w-full rounded-md border border-grayscale-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-light-accent dark:border-grayscale-700 dark:focus:ring-dark-accent"
+                                placeholder="Enter your password"
+                                className="w-full rounded border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-light-accent dark:focus:ring-dark-accent"
                             />
                         </div>
 
@@ -48,7 +54,7 @@ export default function LoginPage() {
                             <button
                                 type="submit"
                                 formAction={login}
-                                className="text-light-text dark:text-dark-text bg-light-accent hover:bg-light-hover dark:bg-dark-accent dark:hover:bg-dark-hover rounded-md px-4 py-2 font-semibold transition-colors"
+                                className="bg-light-accent hover:bg-light-hover dark:bg-dark-accent dark:hover:bg-dark-hover rounded px-4 py-2 font-semibold transition-colors"
                             >
                                 Login
                             </button>

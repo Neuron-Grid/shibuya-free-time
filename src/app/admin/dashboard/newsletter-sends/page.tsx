@@ -2,13 +2,11 @@
 
 import type { Database } from "@/types/supabase/database.types";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import React, { useEffect, useState, useCallback } from "react";
 
 type NewsletterSend = Database["public"]["Tables"]["newsletter_sends"]["Row"];
 
 export default function NewsletterSendsListPage() {
-    const router = useRouter();
     const [newsletterSends, setNewsletterSends] = useState<NewsletterSend[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);

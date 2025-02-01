@@ -3,14 +3,12 @@
 import { formatDate } from "@/libs/date";
 import type { Database } from "@/types/supabase/database.types";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import React, { useEffect, useState, useCallback } from "react";
 
 // Supabaseの型から TemporarySpot Rowを取得
 type TemporarySpot = Database["public"]["Tables"]["temporary_spots"]["Row"];
 
 export default function TemporarySpotsListPage() {
-    const router = useRouter();
     const [temporarySpots, setTemporarySpots] = useState<TemporarySpot[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);

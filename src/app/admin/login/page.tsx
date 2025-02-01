@@ -5,19 +5,19 @@ import React from "react";
 
 export default function LoginPage() {
     return (
-        <div className="bg-light-background text-light-text dark:bg-dark-background dark:text-dark-text min-h-screen">
-            <div className="container">
-                <div className="p-4 sm:p-8 flex items-start justify-center">
+        <div className="container">
+            <div className="mx-auto px-4 sm:px-6 md:px-8">
+                <div className="p-4 sm:p-8 max-w-md mx-auto">
                     <form
-                        aria-labelledby="login-form-title"
-                        className="relative w-full max-w-sm rounded p-6 mt-10 sm:mt-16 md:mt-20 pb-20"
+                        aria-labelledby="login-form"
+                        className="relative w-full rounded p-6 mt-6 sm:mt-10 md:mt-12"
                         method="POST"
                     >
                         <h2
-                            id="login-form-title"
+                            id="login-form"
                             className="text-lg font-bold mb-4 text-light-text dark:text-dark-text"
                         >
-                            Login Form
+                            管理者用ログインページ
                         </h2>
 
                         {/* Email */}
@@ -36,7 +36,7 @@ export default function LoginPage() {
                         </div>
 
                         {/* Password */}
-                        <div className="mb-4 relative">
+                        <div className="mb-4">
                             <label className="mb-1 block font-semibold" htmlFor="password">
                                 Password
                             </label>
@@ -50,7 +50,8 @@ export default function LoginPage() {
                             />
                         </div>
 
-                        <div className="absolute bottom-4 right-4">
+                        {/* Submit */}
+                        <div className="mt-6 text-right">
                             <button
                                 type="submit"
                                 formAction={login}

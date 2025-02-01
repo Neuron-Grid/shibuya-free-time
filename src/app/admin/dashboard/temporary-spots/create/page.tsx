@@ -11,6 +11,9 @@ type SpotStatus = Database["public"]["Enums"]["spot_status"];
 // photoテーブルのRow型
 type Photo = Database["public"]["Tables"]["photo"]["Row"];
 
+// categoriesテーブルのRow型
+type Category = Database["public"]["Tables"]["categories"]["Row"];
+
 export default function CreateTemporarySpotPage() {
     const router = useRouter();
 
@@ -26,7 +29,11 @@ export default function CreateTemporarySpotPage() {
     const [photos, setPhotos] = useState<Photo[]>([]);
     const [selectedPhotoId, setSelectedPhotoId] = useState<string>("");
 
-    // [3] ローディング・エラー表示
+    // [3] カテゴリー一覧 + 選択中のカテゴリーID
+    const [categories, setCategories] = useState<Category[]>([]);
+    const [selectedCategoryId, setSelectedCategoryId] = useState<string>("");
+
+    // [4] ローディング・エラー表示
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
 
@@ -51,6 +58,27 @@ export default function CreateTemporarySpotPage() {
         fetchPhotos();
     }, []);
 
+    // カテゴリー一覧を取得
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                setLoading(true);
+                const res = await fetch("/api/categories", { method: "GET" });
+                if (!res.ok) {
+                    const data = await res.json();
+                    throw new Error(data.error || "Failed to fetch categories");
+                }
+                const data: Category[] = await res.json();
+                setCategories(data);
+            } catch (err: unknown) {
+                setError(err instanceof Error ? err.message : "Unknown error");
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchCategories();
+    }, []);
+
     // 新規作成 + 写真紐付け
     const handleCreate = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -68,7 +96,7 @@ export default function CreateTemporarySpotPage() {
                 address_lat: 0,
                 address_lng: 0,
                 status,
-                category_id: "",
+                category_id: selectedCategoryId,
             };
 
             const resSpot = await fetch("/api/temporary-spots", {
@@ -85,7 +113,8 @@ export default function CreateTemporarySpotPage() {
                 title: string;
             };
 
-            // 2. 写真を紐付け (selectedPhotoId が選択されている場合)
+            // 2. 写真を紐付け
+            // selectedPhotoId が選択されている場合
             if (selectedPhotoId) {
                 const patchRes = await fetch("/api/photo", {
                     method: "PATCH",
@@ -102,7 +131,7 @@ export default function CreateTemporarySpotPage() {
             }
 
             // 3. 成功したら一覧へ遷移
-            alert("新規記事を作成し、写真を紐付けました。");
+            alert("新規記事を作成に成功しました。");
             router.push("/admin/dashboard/temporary-spots");
         } catch (err: unknown) {
             setError(err instanceof Error ? err.message : "Unknown error");
@@ -207,6 +236,26 @@ export default function CreateTemporarySpotPage() {
                         </select>
                     </div>
 
+                    {/* category */}
+                    <div>
+                        <label htmlFor="categorySelect" className="block mb-1 font-medium">
+                            カテゴリー
+                        </label>
+                        <select
+                            id="categorySelect"
+                            className="border rounded p-2 w-full"
+                            value={selectedCategoryId}
+                            onChange={(e) => setSelectedCategoryId(e.target.value)}
+                        >
+                            <option value="">-- カテゴリーを選択 --</option>
+                            {categories.map((category) => (
+                                <option key={category.id} value={category.id}>
+                                    {category.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
                     <hr className="my-2 w-full" />
 
                     {/* 既存の写真を選択 */}
@@ -233,7 +282,7 @@ export default function CreateTemporarySpotPage() {
                     <button
                         type="submit"
                         disabled={loading}
-                        className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
+                        className="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded"
                     >
                         {loading ? "作成中..." : "新規作成"}
                     </button>

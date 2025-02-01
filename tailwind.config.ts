@@ -54,9 +54,7 @@ const config: Config = {
                             marginBottom: theme("spacing.4"),
                         },
                         "th, td": {
-                            border: `1px solid ${
-                                theme("colors.grayscale.300")
-                            }`,
+                            border: `1px solid ${theme("colors.grayscale.300")}`,
                             padding: theme("spacing.2"),
                         },
                         th: {

@@ -1,8 +1,7 @@
 import { getAllTagsAndCategories } from "@/libs/newt/side_data";
 import Link from "next/link";
-import type React from "react";
 
-const Side: React.FC = async () => {
+export default async function Side() {
     // タグ＆カテゴリをまとめて取得
     const { tags, categories } = await getAllTagsAndCategories();
 
@@ -54,6 +53,4 @@ const Side: React.FC = async () => {
             </aside>
         </div>
     );
-};
-
-export default Side;
+}

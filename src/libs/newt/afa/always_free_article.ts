@@ -50,7 +50,7 @@ export const getAlwaysFreeArticle = cache(
 );
 
 export const getAuthorByArticleSlug = cache(async (slug: string): Promise<Author | null> => {
-    // 1) 記事を取得
+    // 記事を取得
     const article = await getAlwaysFreeArticle(slug);
     // 記事が見つからない、または記事に author 情報がない場合は null を返す
     if (!article?.author?.slug) {
@@ -109,63 +109,29 @@ export const getNextArticle = cache(
     },
 );
 
-// always_free_articleに紐づくタグ一覧とその使用回数を取得
+// always_free_articleに紐づくタグ一覧を取得
 //  フィールド名 "tag" が複数選択(配列)という前提
-export const getTagsFromAlwaysFree = cache(async (): Promise<TagWithCount[]> => {
-    // 全タグを取得
+export const getTagsFromAlwaysFree = cache(async (): Promise<Tag[]> => {
     const { items: tags } = await newt_client.getContents<Tag>({
         appUid: env_validation.newt_app_uid,
         modelUid: "tag",
         query: {
-            limit: 50,
+            limit: 20,
         },
     });
 
-    // always_free_article のデータを取得 (tagフィールドのみ抜き出す)
-    const { items: articles } = await newt_client.getContents<{
-        tag: Tag[];
-    }>({
-        appUid: env_validation.newt_app_uid,
-        modelUid: "always_free_article",
-        query: {
-            select: ["tag"],
-            depth: 1,
-            limit: 50,
-        },
-    });
-
-    const tagCountMap = new Map<string, number>();
-
-    for (const article of articles) {
-        // 安全策
-        if (!Array.isArray(article.tag)) continue;
-        for (const tagObj of article.tag) {
-            if (!tagObj?._id) continue;
-            const tagId = tagObj._id;
-            tagCountMap.set(tagId, (tagCountMap.get(tagId) || 0) + 1);
-        }
-    }
-
-    // カウントが1以上のタグだけに絞って返す
-    const tagsWithCount: TagWithCount[] = tags
-        .map((tagItem) => ({
-            ...tagItem,
-            count: tagCountMap.get(tagItem._id) || 0,
-        }))
-        .filter((t) => t.count > 0);
-
-    return tagsWithCount;
+    // タグの使用回数を扱うロジックは削除して、取得したタグをそのまま返す
+    return tags;
 });
 
 // カテゴリー一覧を取得
-// 記事のないカテゴリーは除外
 export const getCategoriesFromAlwaysFree = cache(async (): Promise<Category[]> => {
     // カテゴリーと記事を並行して取得
     const [{ items: categories }, { items: articles }] = await Promise.all([
         newt_client.getContents<Category>({
             appUid: env_validation.newt_app_uid,
             modelUid: "category",
-            query: { limit: 50 },
+            query: { limit: 20 },
         }),
         newt_client.getContents<{
             category: Category;
@@ -175,19 +141,19 @@ export const getCategoriesFromAlwaysFree = cache(async (): Promise<Category[]> =
             query: {
                 select: ["category"],
                 depth: 1,
-                limit: 50,
+                limit: 20,
             },
         }),
     ]);
 
-    // 実際に使われているカテゴリーの _id を抽出
-    const categoryIdsInUse = new Set<string>();
-    for (const article of articles) {
-        if (article.category?._id) {
-            categoryIdsInUse.add(article.category._id);
-        }
+    // 全てのカテゴリーを取得
+    const categoryMap = new Map<string, Category>();
+    for (const category of categories) {
+        categoryMap.set(category._id, category);
     }
 
-    // 記事で利用されているカテゴリのみ返す
-    return categories.filter((cat) => categoryIdsInUse.has(cat._id));
+    const usedCategories = categories.filter((category) =>
+        articles.some((article) => article.category?._id === category._id),
+    );
+    return usedCategories;
 });

@@ -7,33 +7,28 @@ import {
     getTags as getLimitedTags,
 } from "@/libs/newt/lta/limited_time_article";
 import type { Category } from "@/types/newt/Category_type";
-import type { TagWithCount } from "@/types/newt/Tag_type";
+import type { Tag } from "@/types/newt/Tag_type";
 import { cache } from "react";
 
-//  タグ配列を ID でマージし、count を合算した配列を返す
-function unifyTags(allTags: TagWithCount[]): TagWithCount[] {
-    const map = allTags.reduce<Map<string, TagWithCount>>((acc, tag) => {
-        const existing = acc.get(tag._id);
-        if (existing) {
-            existing.count += tag.count;
-        } else {
-            acc.set(tag._id, { ...tag });
-        }
-        return acc;
-    }, new Map());
+// Tag[]が引数として渡されたときに、重複を取り除いて返す
+function unifyTags(allTags: Tag[]): Tag[] {
+    const map = new Map<string, Tag>();
+    for (const tag of allTags) {
+        map.set(tag._id, tag);
+    }
     return Array.from(map.values());
 }
 
-// タグをまとめて取得
-export const getUnifiedTags = cache(async (): Promise<TagWithCount[]> => {
+// タグをまとめて取得 (Tag[] を返す)
+export const getUnifiedTags = cache(async (): Promise<Tag[]> => {
     const [limitedTags, alwaysFreeTags] = await Promise.all([
-        getLimitedTags(),
-        getAlwaysFreeTags(),
+        getLimitedTags(), // Promise<Tag[]>
+        getAlwaysFreeTags(), // Promise<Tag[]>
     ]);
     return unifyTags([...limitedTags, ...alwaysFreeTags]);
 });
 
-// カテゴリをまとめて取得
+// カテゴリをまとめて取得 (Category[] を返す)
 export const getUnifiedCategories = cache(async (): Promise<Category[]> => {
     const [limitedCategories, alwaysFreeCategories] = await Promise.all([
         getLimitedCategories(),

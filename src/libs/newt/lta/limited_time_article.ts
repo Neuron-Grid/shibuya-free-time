@@ -221,16 +221,8 @@ export const getCategories = cache(async (): Promise<Category[]> => {
         }),
     ]);
 
-    // 記事で実際に使われているカテゴリーのIDを抽出
-    const categoryIdsInUse = new Set<string>();
-    for (const article of articles) {
-        if (article.category?._id) {
-            categoryIdsInUse.add(article.category._id);
-        }
-    }
-
     // 記事で使われているカテゴリーのみ返す
-    return categories.filter((category) => categoryIdsInUse.has(category._id));
+    return categories;
 });
 
 // 開始日と終了日を取得する

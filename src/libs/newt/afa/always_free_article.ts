@@ -152,8 +152,5 @@ export const getCategoriesFromAlwaysFree = cache(async (): Promise<Category[]> =
         categoryMap.set(category._id, category);
     }
 
-    const usedCategories = categories.filter((category) =>
-        articles.some((article) => article.category?._id === category._id),
-    );
-    return usedCategories;
+    return categories;
 });

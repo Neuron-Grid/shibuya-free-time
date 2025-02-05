@@ -10,11 +10,23 @@ import type { Category } from "@/types/newt/Category_type";
 import type { Tag } from "@/types/newt/Tag_type";
 import { cache } from "react";
 
-// タグの重複を取り除いて返す
-function unifyTags(allTags: Tag[]): Tag[] {
+// slug でカテゴリーを一意化するユーティリティ関数
+function unifyCategoriesBySlug(allCategories: Category[]): Category[] {
+    const map = new Map<string, Category>();
+    for (const category of allCategories) {
+        // key に slug を使用
+        map.set(category.slug, category);
+    }
+    // Map から値のみ取り出して配列に変換
+    return Array.from(map.values());
+}
+
+// slug でタグを一意化するユーティリティ関数
+function unifyTagsBySlug(allTags: Tag[]): Tag[] {
     const map = new Map<string, Tag>();
     for (const tag of allTags) {
-        map.set(tag._id, tag);
+        // key に slug を使用
+        map.set(tag.slug, tag);
     }
     return Array.from(map.values());
 }
@@ -22,24 +34,31 @@ function unifyTags(allTags: Tag[]): Tag[] {
 // タグをまとめて取得 (Tag[] を返す)
 export const getUnifiedTags = cache(async (): Promise<Tag[]> => {
     const [limitedTags, alwaysFreeTags] = await Promise.all([
-        getLimitedTags(), // Promise<Tag[]>
-        getAlwaysFreeTags(), // Promise<Tag[]>
+        getLimitedTags(), // 期間限定
+        getAlwaysFreeTags(), // 常時無料
     ]);
-    return unifyTags([...limitedTags, ...alwaysFreeTags]);
+    // slug で重複除外
+    const allTags = [...limitedTags, ...alwaysFreeTags];
+    return unifyTagsBySlug(allTags);
 });
 
 // カテゴリをまとめて取得 (Category[] を返す)
 export const getUnifiedCategories = cache(async (): Promise<Category[]> => {
     const [limitedCategories, alwaysFreeCategories] = await Promise.all([
-        getLimitedCategories(), // Promise<Category[]>
-        getAlwaysFreeCategories(), // Promise<Category[]>
+        getLimitedCategories(), // 期間限定
+        getAlwaysFreeCategories(), // 常時無料
     ]);
 
-    return [...limitedCategories, ...alwaysFreeCategories];
+    // 連結したあと、slug で一意化
+    const allCats = [...limitedCategories, ...alwaysFreeCategories];
+    return unifyCategoriesBySlug(allCats);
 });
 
-// タグとカテゴリを両方取得し、オブジェクトで返す
+// タグとカテゴリを両方取得し、まとめたオブジェクトとして返す
 export const getAllTagsAndCategories = cache(async () => {
-    const [tags, categories] = await Promise.all([getUnifiedTags(), getUnifiedCategories()]);
+    const [tags, categories] = await Promise.all([
+        getUnifiedTags(),
+        getUnifiedCategories(),
+    ]);
     return { tags, categories };
 });

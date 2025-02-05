@@ -18,7 +18,7 @@ export default async function Side() {
                                     href={`/public/categories/${category.slug}`}
                                     className="text-blue-500 hover:underline"
                                 >
-                                    {category.name}
+                                    {category["Category-name"]}
                                 </Link>
                             </li>
                         ))}

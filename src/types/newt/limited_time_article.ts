@@ -18,5 +18,6 @@ export interface limited_time_article extends Content {
     end_day: string;
     nearest_station: string;
     opening_hours?: string;
+    closing_hours?: string;
     meta?: meta;
 }

@@ -3,7 +3,7 @@ import { cookies } from "next/headers";
 import { env_validation } from "@/utils/env_validation";
 
 export async function createServerSupabaseClient() {
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     // 本番環境の場合、secure と sameSite のオプションを追加
     const defaultCookieOptions = process.env.NODE_ENV === "production"
         ? { secure: true, sameSite: "lax" as const }
